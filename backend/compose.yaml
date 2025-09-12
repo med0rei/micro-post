@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:13.22-alpine
+    platform: linux/amd64
+    container_name: postgres
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - micro-post-db-store:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+
+volumes:
+  micro-post-db-store:
