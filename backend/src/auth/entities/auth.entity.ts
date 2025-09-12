@@ -18,7 +18,7 @@ export class Auth {
   token: string;
 
   @Column()
-  expireAt: Date;
+  expiresAt: Date;
 
   @CreateDateColumn()
   readonly createdAt?: Date;
