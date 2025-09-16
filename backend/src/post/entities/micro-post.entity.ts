@@ -6,7 +6,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity()
+@Entity('micro_posts')
 export class MicroPost {
   @PrimaryGeneratedColumn()
   readonly id: number;
