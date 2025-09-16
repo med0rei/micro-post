@@ -1,6 +1,6 @@
 import { Controller, Post, Request, UseGuards, UsePipes } from '@nestjs/common';
-import { ZodValidationPipe } from '../pipes/zod-validation.pipe';
-import type { RequestWith } from '../types/request-with.d';
+import { ZodValidationPipe } from '../shared/pipes/zod-validation.pipe';
+import type { RequestWith } from '../shared/types/request-with.d';
 import { UserDto } from '../user/schemas/user.schema';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
