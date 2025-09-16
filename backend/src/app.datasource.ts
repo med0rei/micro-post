@@ -11,7 +11,7 @@ const AppDataSource = new DataSource({
   port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 5432,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  entities: [__dirname + '/../**/*.entity.ts'],
+  entities: [__dirname + '/../**/*.entity.{ts,js}'],
   migrations: ['src/migrations/*.ts'],
   namingStrategy: new SnakeNamingStrategy(),
 });
