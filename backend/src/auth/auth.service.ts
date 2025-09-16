@@ -22,7 +22,7 @@ export class AuthService {
   ) {}
 
   async getAuth(
-    name: string,
+    username: string,
     password: string,
   ): Promise<{ token: string; user_id: number }> {
     {
@@ -34,7 +34,7 @@ export class AuthService {
       const passwordHash = await this.hashService.hash(password);
       const user = await this.userRepository.findOne({
         where: {
-          username: Equal(name),
+          username: Equal(username),
           passwordHash: Equal(passwordHash),
         },
       });
