@@ -29,6 +29,15 @@ export class UserService {
     return user;
   }
 
+  async findOneForAuth(username: string): Promise<User | null> {
+    return this.userRepository.findOne({
+      where: {
+        username: Equal(username),
+      },
+      select: ['id', 'passwordHash'],
+    });
+  }
+
   async findOneById(userId: number): Promise<User | null> {
     const user = await this.userRepository.findOne({
       where: {

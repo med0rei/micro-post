@@ -26,7 +26,7 @@ export class AuthService {
     username: string,
     password: string,
   ): Promise<UserDto | null> {
-    const user: User | null = await this.userService.findOne(username);
+    const user: User | null = await this.userService.findOneForAuth(username);
 
     console.log('User fetched:', user);
     if (!user) {

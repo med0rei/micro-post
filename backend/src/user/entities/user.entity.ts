@@ -2,9 +2,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { MicroPost } from '../../post/entities/micro-post.entity';
 
 @Entity('users')
 export class User {
@@ -14,11 +16,17 @@ export class User {
   @Column('varchar', { unique: true, nullable: false })
   username: string;
 
-  @Column('varchar')
+  @Column('varchar', { select: false })
   passwordHash: string;
 
-  @Column('varchar', { unique: true, nullable: false })
+  @Column('varchar', { unique: true, nullable: false, select: false })
   email: string;
+
+  @OneToMany(
+    () => MicroPost,
+    (post) => post.user,
+  )
+  posts: MicroPost[];
 
   @CreateDateColumn()
   readonly createdAt?: Date;
