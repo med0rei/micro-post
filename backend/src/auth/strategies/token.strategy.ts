@@ -14,8 +14,6 @@ export class TokenStrategy extends PassportStrategy(Strategy, 'token') {
   async validate(req: Request): Promise<UserDto> {
     const token = req.headers['authorization']?.replace('Bearer ', '');
 
-    console.log('TokenStrategy validate called with token:', token);
-
     if (!token) {
       throw new UnauthorizedException();
     }
