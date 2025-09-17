@@ -12,9 +12,17 @@ export class PostService {
 
   async createPost(userId: number, content: string): Promise<MicroPost> {
     const createdPost = this.microPostsRepository.create({
-      userId,
+      user: { id: userId },
       content,
     });
     return await this.microPostsRepository.save(createdPost);
+  }
+
+  async getPostList(offset: number, limit: number): Promise<MicroPost[]> {
+    return this.microPostsRepository.find({
+      relations: ['user'],
+      skip: offset,
+      take: limit,
+    });
   }
 }

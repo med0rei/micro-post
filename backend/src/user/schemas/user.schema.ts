@@ -7,6 +7,13 @@ export const userSchema = z
   })
   .strict();
 
+export const publicUserSchema = z
+  .object({
+    id: z.number(),
+    username: z.string(),
+  })
+  .required();
+
 export const createUserSchema = z
   .object({
     username: z.string(),
@@ -16,4 +23,5 @@ export const createUserSchema = z
   .strict();
 
 export type UserDto = z.infer<typeof userSchema>;
+export type PublicUserDto = z.infer<typeof publicUserSchema>;
 export type CreateUserDto = z.infer<typeof createUserSchema>;
