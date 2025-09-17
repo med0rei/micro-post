@@ -1,6 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { Strategy } from 'passport-local';
+import { Request } from 'express';
+import { Strategy } from 'passport-custom';
 import type { UserDto } from '../../user/schemas/user.schema';
 import { AuthService } from '../auth.service';
 
@@ -11,10 +12,9 @@ export class TokenStrategy extends PassportStrategy(Strategy, 'token') {
   }
 
   async validate(req: Request): Promise<UserDto> {
-    const token: string | null = req.headers['authorization']?.replace(
-      'Bearer ',
-      '',
-    );
+    const token = req.headers['authorization']?.replace('Bearer ', '');
+
+    console.log('TokenStrategy validate called with token:', token);
 
     if (!token) {
       throw new UnauthorizedException();
