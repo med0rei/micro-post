@@ -10,14 +10,15 @@ import {
 import { TokenAuthGuard } from '../shared/guards/token-auth.guard';
 import { ZodValidationPipe } from '../shared/pipes/zod-validation.pipe';
 import type { RequestWithUserDto } from '../shared/types/request-with';
-import { MicroPost } from './entities/micro-post.entity';
 import { PostService } from './post.service';
 import type {
   CreatePostDto,
+  CreatePostResponseDto,
   GetPostListDto,
   GetPostListResponseDto,
 } from './schemas/post.schema';
 import {
+  createPostResponseSchema,
   createPostSchema,
   getPostListResponseSchema,
   getPostListSchema,
@@ -47,7 +48,9 @@ export class PostController {
     @Request() req: RequestWithUserDto,
     @Body(new ZodValidationPipe(createPostSchema))
     createPostDto: CreatePostDto,
-  ): Promise<MicroPost | null> {
-    return this.postService.createPost(req.user.userId, createPostDto.content);
+  ): Promise<CreatePostResponseDto> {
+    return createPostResponseSchema.parse(
+      await this.postService.createPost(req.user.userId, createPostDto.content),
+    );
   }
 }

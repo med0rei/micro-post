@@ -15,7 +15,12 @@ export class PostService {
       user: { id: userId },
       content,
     });
-    return await this.microPostsRepository.save(createdPost);
+    const savedPost = await this.microPostsRepository.save(createdPost);
+
+    return this.microPostsRepository.findOneOrFail({
+      where: { id: savedPost.id },
+      relations: ['user'],
+    });
   }
 
   async getPostList(offset: number, limit: number): Promise<MicroPost[]> {
