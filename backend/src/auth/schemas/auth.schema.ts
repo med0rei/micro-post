@@ -15,5 +15,13 @@ export const signupSchema = z
   })
   .strict();
 
+export const loginResponseSchema = z
+  .object({
+    token: z.string(),
+    userId: z.number(),
+  })
+  .strict();
+
 export type LoginDto = z.infer<typeof loginSchema>;
 export type SignupDto = z.infer<typeof signupSchema>;
+export type LoginResponseDto = z.infer<typeof loginResponseSchema>;
