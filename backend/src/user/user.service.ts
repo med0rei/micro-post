@@ -29,6 +29,20 @@ export class UserService {
     return user;
   }
 
+  async findOneById(userId: number): Promise<User | null> {
+    const user = await this.userRepository.findOne({
+      where: {
+        id: Equal(userId),
+      },
+    });
+
+    if (!user) {
+      return null;
+    }
+
+    return user;
+  }
+
   async createUser(createUserDto: CreateUserDto): Promise<User> {
     const existingUser = await this.findOne(createUserDto.username);
     if (existingUser) {

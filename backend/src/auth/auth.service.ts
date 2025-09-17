@@ -47,6 +47,32 @@ export class AuthService {
     }
   }
 
+  async validateToken(token: string): Promise<UserDto | null> {
+    const auth: Auth | null = await this.authRepository.findOne({
+      where: {
+        token: Equal(token),
+      },
+    });
+
+    if (!auth) {
+      return null;
+    }
+
+    const now = new Date();
+    if (auth.expiresAt < now) {
+      // トークンの有効期限が切れている場合、トークンを削除してnullを返す
+      await this.authRepository.delete({ id: auth.id });
+      return null;
+    }
+
+    const user: User | null = await this.userService.findOneById(auth.userId);
+    if (!user) {
+      return null;
+    }
+
+    return { userId: user.id, username: user.username };
+  }
+
   async login(userDto: UserDto): Promise<{ token: string; userId: number }> {
     const result = {
       token: '',
