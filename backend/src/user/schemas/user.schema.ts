@@ -22,6 +22,17 @@ export const createUserSchema = z
   })
   .strict();
 
+export const createUserResponseSchema = z
+  .object({
+    id: z.number(),
+    username: z.string(),
+    email: z.string(),
+    createdAt: z.date().optional(),
+    updatedAt: z.date().optional(),
+  })
+  .strip();
+
 export type UserDto = z.infer<typeof userSchema>;
 export type PublicUserDto = z.infer<typeof publicUserSchema>;
 export type CreateUserDto = z.infer<typeof createUserSchema>;
+export type CreateUserResponseDto = z.infer<typeof createUserResponseSchema>;
