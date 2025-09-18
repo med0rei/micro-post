@@ -1,34 +1,35 @@
 import { z } from 'zod';
+import { USER } from '../../shared/constants/entity-validation';
 
 export const userSchema = z
   .object({
-    userId: z.number(),
-    username: z.string(),
+    userId: USER.id,
+    username: USER.username,
   })
   .strict();
 
 export const publicUserSchema = z
   .object({
-    id: z.number(),
-    username: z.string(),
+    id: USER.id,
+    username: USER.username,
   })
   .required();
 
 export const createUserSchema = z
   .object({
-    username: z.string(),
-    password: z.string(),
-    email: z.string().email(),
+    username: USER.username,
+    password: USER.password,
+    email: USER.email,
   })
   .strict();
 
 export const createUserResponseSchema = z
   .object({
-    id: z.number(),
-    username: z.string(),
-    email: z.string(),
-    createdAt: z.date(),
-    updatedAt: z.date(),
+    id: USER.id,
+    username: USER.username,
+    email: USER.email,
+    createdAt: USER.createdAt,
+    updatedAt: USER.updatedAt,
   })
   .strip();
 

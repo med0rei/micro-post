@@ -1,24 +1,25 @@
 import { z } from 'zod';
+import { AUTH, USER } from '../../shared/constants/entity-validation';
 
 export const loginSchema = z
   .object({
-    username: z.string(),
-    password: z.string(),
+    username: USER.username,
+    password: USER.password,
   })
   .strict();
 
 export const signupSchema = z
   .object({
-    username: z.string(),
-    password: z.string(),
-    email: z.string().email(),
+    username: USER.username,
+    password: USER.password,
+    email: USER.email,
   })
   .strict();
 
 export const loginResponseSchema = z
   .object({
-    token: z.string(),
-    userId: z.number(),
+    token: AUTH.token,
+    userId: USER.id,
   })
   .strict();
 

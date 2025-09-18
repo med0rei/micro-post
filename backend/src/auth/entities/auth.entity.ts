@@ -14,10 +14,10 @@ export class Auth {
   @Column()
   userId: number;
 
-  @Column('varchar')
+  @Column('varchar', { unique: true, nullable: false })
   token: string;
 
-  @Column()
+  @Column({ nullable: false })
   expiresAt: Date;
 
   @CreateDateColumn()

@@ -1,15 +1,16 @@
 import { z } from 'zod';
+import { POST } from '../../shared/constants/entity-validation';
 import { publicUserSchema } from '../../user/schemas/user.schema';
 
 export const microPostBaseSchema = z.object({
-  id: z.number(),
-  content: z.string(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
+  id: POST.id,
+  content: POST.content,
+  createdAt: POST.createdAt,
+  updatedAt: POST.updatedAt,
 });
 
 export const microPostSchema = microPostBaseSchema.extend({
-  userId: z.number(),
+  userId: POST.userId,
 });
 
 export const publicMicroPostSchema = microPostBaseSchema.extend({
@@ -18,14 +19,14 @@ export const publicMicroPostSchema = microPostBaseSchema.extend({
 
 export const createPostSchema = z
   .object({
-    content: z.string(),
+    content: POST.content,
   })
   .strict();
 
 export const getPostListSchema = z
   .object({
-    offset: z.coerce.number(),
-    limit: z.coerce.number(),
+    offset: POST.getPostList.offset,
+    limit: POST.getPostList.limit,
   })
   .strict();
 

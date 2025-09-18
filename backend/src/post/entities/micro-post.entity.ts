@@ -24,7 +24,7 @@ export class MicroPost {
 
   userId: number;
 
-  @Column()
+  @Column('varchar', { nullable: false, length: 1000 })
   content: string;
 
   @CreateDateColumn()
