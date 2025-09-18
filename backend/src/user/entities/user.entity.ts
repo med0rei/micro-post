@@ -29,8 +29,8 @@ export class User {
   posts: MicroPost[];
 
   @CreateDateColumn()
-  readonly createdAt?: Date;
+  readonly createdAt: Date;
 
   @UpdateDateColumn()
-  readonly updatedAt?: Date;
+  readonly updatedAt: Date;
 }

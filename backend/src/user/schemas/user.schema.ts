@@ -27,8 +27,8 @@ export const createUserResponseSchema = z
     id: z.number(),
     username: z.string(),
     email: z.string(),
-    createdAt: z.date().optional(),
-    updatedAt: z.date().optional(),
+    createdAt: z.date(),
+    updatedAt: z.date(),
   })
   .strip();
 

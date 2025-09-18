@@ -21,8 +21,8 @@ export class Auth {
   expiresAt: Date;
 
   @CreateDateColumn()
-  readonly createdAt?: Date;
+  readonly createdAt: Date;
 
   @UpdateDateColumn()
-  readonly updatedAt?: Date;
+  readonly updatedAt: Date;
 }
