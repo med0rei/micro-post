@@ -1,4 +1,15 @@
-import type { JSXElement } from "@fluentui/react-components";
+import type { JSXElement } from '@fluentui/react-components';
+import {
+  Body1,
+  Button,
+  Caption1,
+  Card,
+  CardFooter,
+  CardHeader,
+  CardPreview,
+  makeStyles,
+  Text,
+} from '@fluentui/react-components';
 import {
   Ellipsis,
   EllipsisVertical,
@@ -7,38 +18,26 @@ import {
   Repeat2,
   Reply,
   UserPlus,
-} from "lucide-react";
-
-import {
-  makeStyles,
-  Body1,
-  Caption1,
-  Button,
-  Card,
-  CardFooter,
-  CardHeader,
-  CardPreview,
-  Text,
-} from "@fluentui/react-components";
+} from 'lucide-react';
 
 const resolveAsset = (asset: string) => {
   const ASSET_URL =
-    "https://raw.githubusercontent.com/microsoft/fluentui/master/packages/react-components/react-card/stories/src/assets/";
+    'https://raw.githubusercontent.com/microsoft/fluentui/master/packages/react-components/react-card/stories/src/assets/';
 
   return `${ASSET_URL}${asset}`;
 };
 
 const useStyles = makeStyles({
   card: {
-    margin: "auto",
-    maxWidth: "100%",
-    padding: "20px",
-    width: "720px",
+    margin: 'auto',
+    maxWidth: '100%',
+    padding: '20px',
+    width: '720px',
   },
   cardPreview: {
-    marginBottom: "5px",
-    marginLeft: "20px",
-    marginTop: "5px",
+    marginBottom: '5px',
+    marginLeft: '20px',
+    marginTop: '5px',
   },
 });
 
@@ -50,8 +49,8 @@ export const Post = (): JSXElement => {
       <CardHeader
         image={
           <img
-            src={resolveAsset("avatar_elvia.svg")}
-            alt="Elvia Atkins avatar"
+            src={resolveAsset('avatar_elvia.svg')}
+            alt='Elvia Atkins avatar'
           />
         }
         header={
@@ -59,9 +58,9 @@ export const Post = (): JSXElement => {
             <b>John Smith</b>
             <span>
               <Button
-                appearance="transparent"
+                appearance='transparent'
                 icon={<UserPlus />}
-                aria-label="Follow"
+                aria-label='Follow'
               />
             </span>
             <div>@john</div>
@@ -70,9 +69,9 @@ export const Post = (): JSXElement => {
         description={<Caption1>5h ago</Caption1>}
         action={
           <Button
-            appearance="transparent"
+            appearance='transparent'
             icon={<EllipsisVertical />}
-            aria-label="More options"
+            aria-label='More options'
           />
         }
       />
