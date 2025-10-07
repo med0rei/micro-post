@@ -1,10 +1,12 @@
 import { Button, Input, Label, useId } from '@fluentui/react-components';
 import { LogIn } from 'lucide-react';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { type SignInResult, signIn } from '../api/auth';
+import { UserContext } from '../contexts/UserContext';
 
 export const SignInForm = () => {
+  const userContext = useContext(UserContext);
   const [credentials, setCredentials] = useState({ userId: '', password: '' });
   const navigate = useNavigate();
 
@@ -16,6 +18,10 @@ export const SignInForm = () => {
     );
     if (result.success) {
       console.log('Sign-in successful:', result.data);
+      userContext.setUserInfo({
+        userId: result.data.userId,
+        token: result.data.token,
+      });
       navigate('/main');
     } else {
       console.error('Sign-in failed:', result.error);
