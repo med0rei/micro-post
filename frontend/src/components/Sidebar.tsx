@@ -1,4 +1,6 @@
-import { makeStyles } from '@fluentui/react-components';
+import { Button, makeStyles, Textarea } from '@fluentui/react-components';
+import { Send } from 'lucide-react';
+import { useState } from 'react';
 
 const useStyles = makeStyles({
   sidebar: {
@@ -10,5 +12,25 @@ const useStyles = makeStyles({
 
 export const Sidebar = () => {
   const styles = useStyles();
-  return <div className={styles.sidebar}>Sidebar</div>;
+  const [message, setMessage] = useState('');
+  return (
+    <div className={styles.sidebar}>
+      <div>hoge</div>
+      <div>hoge@example.com</div>
+
+      <div>
+        <Textarea
+          rows={4}
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+        ></Textarea>
+      </div>
+
+      <div>
+        <Button appearance='primary' icon={<Send />}>
+          送信
+        </Button>
+      </div>
+    </div>
+  );
 };
