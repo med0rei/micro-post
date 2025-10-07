@@ -1,4 +1,7 @@
 import { makeStyles } from '@fluentui/react-components';
+import { useContext } from 'react';
+import { useNavigate } from 'react-router';
+import { UserContext } from '../contexts/UserContext';
 
 const useStyles = makeStyles({
   header: {
@@ -10,5 +13,19 @@ const useStyles = makeStyles({
 
 export const Header = () => {
   const styles = useStyles();
-  return <div className={styles.header}>Header</div>;
+  const navigate = useNavigate();
+  const { setUserInfo } = useContext(UserContext);
+
+  const logout = () => {
+    setUserInfo(null);
+    navigate('/');
+  };
+
+  return (
+    <div className={styles.header}>
+      <span>MicroPost</span>
+      <span>UserName</span>
+      <span onClick={logout}>ログアウト</span>
+    </div>
+  );
 };
