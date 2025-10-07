@@ -19,13 +19,7 @@ import {
   Reply,
   UserPlus,
 } from 'lucide-react';
-
-const resolveAsset = (asset: string) => {
-  const ASSET_URL =
-    'https://raw.githubusercontent.com/microsoft/fluentui/master/packages/react-components/react-card/stories/src/assets/';
-
-  return `${ASSET_URL}${asset}`;
-};
+import type { PostType } from '../contexts/PostListContext';
 
 const useStyles = makeStyles({
   card: {
@@ -41,21 +35,16 @@ const useStyles = makeStyles({
   },
 });
 
-export const Post = (): JSXElement => {
+export const Post = ({ post }: { post: PostType }): JSXElement => {
   const styles = useStyles();
 
   return (
     <Card className={styles.card}>
       <CardHeader
-        image={
-          <img
-            src={resolveAsset('avatar_elvia.svg')}
-            alt='Elvia Atkins avatar'
-          />
-        }
+        image={<img alt={`${post.user.username} avatar`} />}
         header={
           <Body1>
-            <b>John Smith</b>
+            <b>{post.user.username}</b>
             <span>
               <Button
                 appearance='transparent'
@@ -63,10 +52,10 @@ export const Post = (): JSXElement => {
                 aria-label='Follow'
               />
             </span>
-            <div>@john</div>
+            <div>@{post.user.username}</div>
           </Body1>
         }
-        description={<Caption1>5h ago</Caption1>}
+        description={<Caption1>{post.createdAt}</Caption1>}
         action={
           <Button
             appearance='transparent'
@@ -77,7 +66,7 @@ export const Post = (): JSXElement => {
       />
 
       <CardPreview>
-        <Text className={styles.cardPreview}>こんにちは！</Text>
+        <Text className={styles.cardPreview}>{post.content}</Text>
       </CardPreview>
 
       <CardFooter>

@@ -13,7 +13,7 @@ export const Contents = () => {
   const styles = useStyles();
   return (
     <div className={styles.contents}>
-      <PostList></PostList>
+      <PostList />
     </div>
   );
 };

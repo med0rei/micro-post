@@ -51,7 +51,7 @@ export const PostList = () => {
       <p>PostList</p>
 
       {postList.map((p) => (
-        <Post key={p.id} />
+        <Post key={p.id} post={p} />
       ))}
     </div>
   );

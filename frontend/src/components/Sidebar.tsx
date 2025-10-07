@@ -1,7 +1,8 @@
 import { Button, makeStyles, Textarea } from '@fluentui/react-components';
 import { Send } from 'lucide-react';
 import { useContext, useState } from 'react';
-import { createPost } from '../api/posts';
+import { createPost, fetchPosts } from '../api/posts';
+import { PostListContext, type PostType } from '../contexts/PostListContext';
 import { UserContext } from '../contexts/UserContext';
 
 const useStyles = makeStyles({
@@ -17,14 +18,51 @@ export const Sidebar = () => {
   const { userInfo } = useContext(UserContext);
   const [message, setMessage] = useState('');
 
-  const onSendClick = () => {
+  const { setPostList } = useContext(PostListContext);
+
+  const fetchPostList = async () => {
+    if (!userInfo) return;
+    const fetchPostsResult = await fetchPosts(userInfo.token, {
+      offset: 0,
+      limit: 20,
+    });
+
+    console.log(fetchPostsResult);
+    if (!fetchPostsResult.success) {
+      console.error('Failed to fetch posts:', fetchPostsResult.error);
+      return;
+    }
+
+    if (!fetchPostsResult.data) {
+      console.error('data is falsy');
+      return;
+    }
+
+    setPostList(
+      fetchPostsResult.data.map(
+        (post: any): PostType => ({
+          id: post.id,
+          content: post.content,
+          createdAt: post.createdAt,
+          updatedAt: post.updatedAt,
+          user: {
+            id: post.user.id,
+            username: post.user.username,
+          },
+        }),
+      ),
+    );
+  };
+
+  const onSendClick = async () => {
     if (!userInfo) {
       console.error('User not signed in');
       return;
     }
 
-    createPost(userInfo.token, message);
+    await createPost(userInfo.token, message);
     setMessage('');
+    await fetchPostList();
   };
 
   return (
