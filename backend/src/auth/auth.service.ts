@@ -8,6 +8,7 @@ import { TokenService } from '../token/token.service';
 import type { User } from '../user/entities/user.entity';
 import { UserDto } from '../user/schemas/user.schema';
 import { UserService } from '../user/user.service';
+import { config } from 'dotenv';
 
 @Injectable()
 export class AuthService {
