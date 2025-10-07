@@ -3,22 +3,81 @@ import { API_HOST } from './constants';
 
 const BASE_URL = `${API_HOST}/posts`;
 
-export interface CreatePostResult {
+export interface ApiError {
+  message: string;
+  code: string;
+  status?: number;
+}
+
+export interface ApiResult<T> {
   success: boolean;
-  data?: any;
-  error?: {
-    message: string;
-    code?: string;
-    status?: number;
+  data?: T;
+  error?: ApiError;
+}
+
+export interface Post {
+  id: number;
+  content: string;
+  createdAt: Date;
+  updatedAt: Date;
+  user: {
+    id: number;
+    username: string;
   };
 }
-export interface GetPostsResult {
-  success: boolean;
-  data?: any;
-  error?: {
-    message: string;
-    code?: string;
-    status?: number;
+
+export type CreatePostResult = ApiResult<Post>;
+export type GetPostsResult = ApiResult<Post[]>;
+
+export const ERROR_CODES = {
+  NETWORK_ERROR: 'NETWORK_ERROR',
+  UNAUTHORIZED: 'UNAUTHORIZED',
+  NOT_FOUND: 'NOT_FOUND',
+  SERVER_ERROR: 'SERVER_ERROR',
+  UNKNOWN_ERROR: 'UNKNOWN_ERROR',
+} as const;
+
+const ERROR_MESSAGES: Record<number, string> = {
+  401: 'アクセストークンが間違っています',
+  404: 'サービスが見つかりません',
+  500: 'サーバーエラーが発生しました',
+};
+
+function handleApiError(error: unknown): ApiError {
+  if (!axios.isAxiosError(error)) {
+    return {
+      message: '予期しないエラーが発生しました',
+      code: ERROR_CODES.UNKNOWN_ERROR,
+    };
+  }
+
+  const axiosError = error as AxiosError;
+
+  if (!axiosError.response) {
+    return {
+      message: 'サーバーに接続できません',
+      code: ERROR_CODES.NETWORK_ERROR,
+    };
+  }
+
+  const status = axiosError.response.status;
+  const code =
+    status === 401
+      ? ERROR_CODES.UNAUTHORIZED
+      : status === 404
+        ? ERROR_CODES.NOT_FOUND
+        : ERROR_CODES.SERVER_ERROR;
+
+  return {
+    message: ERROR_MESSAGES[status] ?? `エラーが発生しました (${status})`,
+    status,
+    code,
+  };
+}
+
+function createAuthHeaders(token: string) {
+  return {
+    Authorization: `Bearer ${token}`,
   };
 }
 
@@ -26,17 +85,11 @@ export const createPost = async (
   token: string,
   content: string,
 ): Promise<CreatePostResult> => {
-  const URL = BASE_URL;
-
   try {
-    const response = await axios.post(
-      URL,
+    const response = await axios.post<Post>(
+      BASE_URL,
       { content },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
+      { headers: createAuthHeaders(token) },
     );
 
     return {
@@ -44,64 +97,20 @@ export const createPost = async (
       data: response.data,
     };
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError;
-
-      if (!axiosError.response) {
-        return {
-          success: false,
-          error: {
-            message: 'サーバーに接続できません',
-            code: 'NETWORK_ERROR',
-          },
-        };
-      }
-      const status = axiosError.response.status;
-
-      const statusMessages: Record<number, string> = {
-        401: 'アクセストークンが間違っています',
-        404: 'サービスが見つかりません',
-        500: 'サーバーエラーが発生しました',
-      };
-
-      return {
-        success: false,
-        error: {
-          message: statusMessages[status] ?? `エラーが発生しました (${status})`,
-          status,
-          code: 'SERVER_ERROR',
-        },
-      };
-    }
-
-    // その他のエラー
     return {
       success: false,
-      error: {
-        message: '予期しないエラーが発生しました',
-        code: 'UNKNOWN_ERROR',
-      },
+      error: handleApiError(error),
     };
   }
 };
 
 export const fetchPosts = async (
   token: string,
-  {
-    offset = 0,
-    limit = 10,
-  }: {
-    offset: number;
-    limit: number;
-  },
+  { offset = 0, limit = 10 }: { offset?: number; limit?: number } = {},
 ): Promise<GetPostsResult> => {
-  const URL = BASE_URL;
-
   try {
-    const response = await axios.get(URL, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+    const response = await axios.get<Post[]>(BASE_URL, {
+      headers: createAuthHeaders(token),
       params: { offset, limit },
     });
 
@@ -110,43 +119,9 @@ export const fetchPosts = async (
       data: response.data,
     };
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError;
-
-      if (!axiosError.response) {
-        return {
-          success: false,
-          error: {
-            message: 'サーバーに接続できません',
-            code: 'NETWORK_ERROR',
-          },
-        };
-      }
-      const status = axiosError.response.status;
-
-      const statusMessages: Record<number, string> = {
-        401: 'アクセストークンが間違っています',
-        404: 'サービスが見つかりません',
-        500: 'サーバーエラーが発生しました',
-      };
-
-      return {
-        success: false,
-        error: {
-          message: statusMessages[status] ?? `エラーが発生しました (${status})`,
-          status,
-          code: 'SERVER_ERROR',
-        },
-      };
-    }
-
-    // その他のエラー
     return {
       success: false,
-      error: {
-        message: '予期しないエラーが発生しました',
-        code: 'UNKNOWN_ERROR',
-      },
+      error: handleApiError(error),
     };
   }
 };
