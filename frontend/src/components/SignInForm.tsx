@@ -2,7 +2,8 @@ import { Button, Input, Label, useId } from '@fluentui/react-components';
 import { LogIn } from 'lucide-react';
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { type SignInResult, signIn } from '../api/auth';
+import { signIn } from '../api/auth';
+import { fetchUser } from '../api/users';
 import { UserContext } from '../contexts/UserContext';
 
 export const SignInForm = () => {
@@ -12,15 +13,21 @@ export const SignInForm = () => {
 
   const onSignInClick = async () => {
     console.log('onSignInClick');
-    const result: SignInResult = await signIn(
-      credentials.userId,
-      credentials.password,
-    );
-    if (result.success) {
+    const result = await signIn(credentials.userId, credentials.password);
+    if (result.success && result.data) {
       console.log('Sign-in successful:', result.data);
       userContext.setUserInfo({
         userId: result.data.userId,
-        username: result.data.username,
+        username: await fetchUser(
+          result.data.token || '',
+          result.data.userId,
+        ).then((res) => {
+          if (res.success && res.data) {
+            return res.data.username;
+          } else {
+            return '';
+          }
+        }),
         token: result.data.token,
       });
       navigate('/main');

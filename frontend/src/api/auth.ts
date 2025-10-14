@@ -4,7 +4,6 @@ import { type ApiResult, handleApiError } from './utils';
 
 export interface SignInData {
   userId: number;
-  username: string;
   token: string;
 }
 
