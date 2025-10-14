@@ -33,7 +33,24 @@ export const createUserResponseSchema = z
   })
   .strip();
 
+export const getUserSchema = z
+  .object({
+    userId: USER.id,
+  })
+  .strict();
+
+export const getUserResponseSchema = z
+  .object({
+    id: USER.id,
+    username: USER.username,
+    createdAt: USER.createdAt,
+    updatedAt: USER.updatedAt,
+  })
+  .strip();
+
 export type UserDto = z.infer<typeof userSchema>;
 export type PublicUserDto = z.infer<typeof publicUserSchema>;
 export type CreateUserDto = z.infer<typeof createUserSchema>;
 export type CreateUserResponseDto = z.infer<typeof createUserResponseSchema>;
+export type GetUserDto = z.infer<typeof getUserSchema>;
+export type GetUserResponseDto = z.infer<typeof getUserResponseSchema>;
