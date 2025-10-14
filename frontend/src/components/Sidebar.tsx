@@ -58,7 +58,7 @@ export const Sidebar = () => {
     if (!userInfo) return;
     const fetchPostsResult = await fetchPosts(userInfo.token, {
       offset: 0,
-      limit: 20,
+      limit: 10,
     });
 
     console.log(fetchPostsResult);
