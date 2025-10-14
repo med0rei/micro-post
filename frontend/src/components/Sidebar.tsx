@@ -16,10 +16,16 @@ import { UserContext } from '../contexts/UserContext';
 
 const useStyles = makeStyles({
   sidebar: {
+    backgroundColor: '#fff',
     borderRight: '1px solid #ccc',
-    height: '100%',
+    height: 'calc(100vh - 52px)',
+    left: '0',
+    overflowY: 'auto',
     padding: '10px',
+    position: 'fixed',
+    top: '52px',
     width: '30%',
+    zIndex: '100',
   },
   card: {
     margin: 'auto',

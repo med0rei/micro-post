@@ -2,10 +2,11 @@ import { makeStyles } from '@fluentui/react-components';
 
 const useStyles = makeStyles({
   body: {
-    width: '100%',
-    height: 'calc(100vh - 32px)',
     display: 'flex',
     flexDirection: 'row',
+    height: 'calc(100vh - 52px)',
+    marginTop: '52px',
+    width: '100%',
   },
 });
 

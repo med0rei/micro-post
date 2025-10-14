@@ -6,6 +6,9 @@ import { UserContext } from '../contexts/UserContext';
 import { Post } from './Post';
 
 const useStyles = makeStyles({
+  container: {
+    margin: '20px',
+  },
   header: {
     margin: '10px',
     padding: '10px',
@@ -66,7 +69,7 @@ export const PostList = () => {
   }, []);
 
   return (
-    <div>
+    <div className={styles.container}>
       <div className={styles.header}>
         <Title3>PostList</Title3>
       </div>

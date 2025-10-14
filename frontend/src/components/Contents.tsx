@@ -3,8 +3,10 @@ import { PostList } from './PostList';
 
 const useStyles = makeStyles({
   contents: {
-    width: '100%',
     height: '100%',
+    marginLeft: '30%',
+    overflowY: 'auto',
+    width: '70%',
   },
 });
 
