@@ -119,7 +119,12 @@ export const Sidebar = () => {
         </CardPreview>
 
         <CardFooter>
-          <Button appearance='primary' icon={<Send />} onClick={onSendClick}>
+          <Button
+            appearance='primary'
+            icon={<Send />}
+            disabled={message.trim() === ''}
+            onClick={onSendClick}
+          >
             送信
           </Button>
         </CardFooter>
