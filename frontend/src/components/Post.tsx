@@ -19,6 +19,7 @@ import {
   Reply,
   UserPlus,
 } from 'lucide-react';
+import { format } from 'date-fns';
 import type { PostType } from '../contexts/PostListContext';
 
 const useStyles = makeStyles({
@@ -55,7 +56,7 @@ export const Post = ({ post }: { post: PostType }): JSXElement => {
             <div>@{post.user.username}</div>
           </Body1>
         }
-        description={<Caption1>{post.createdAt}</Caption1>}
+        description={<Caption1>{format(new Date(post.createdAt), 'yyyy/MM/dd HH:mm:ss')}</Caption1>}
         action={
           <Button
             appearance='transparent'
