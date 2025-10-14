@@ -30,8 +30,14 @@ const useStyles = makeStyles({
   userInfo: {
     marginBottom: '10px',
   },
+  textareaContainer: {
+    marginBottom: '10px',
+  },
+  textarea: {
+    width: '100%',
+  },
   cardPreview: {
-    marign: '10px',
+    margin: '0 10px',
   },
 });
 
@@ -102,11 +108,14 @@ export const Sidebar = () => {
         />
 
         <CardPreview className={styles.cardPreview}>
-          <Textarea
-            rows={4}
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-          ></Textarea>
+          <div>
+            <Textarea
+              className={styles.textarea}
+              rows={4}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+            ></Textarea>
+          </div>
         </CardPreview>
 
         <CardFooter>
