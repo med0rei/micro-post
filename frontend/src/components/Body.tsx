@@ -4,7 +4,6 @@ const useStyles = makeStyles({
   body: {
     width: '100%',
     height: 'calc(100vh - 32px)',
-    border: '2px solid green',
     display: 'flex',
     flexDirection: 'row',
   },

@@ -1,14 +1,31 @@
-import { Button, makeStyles } from '@fluentui/react-components';
+import { Button, makeStyles, Text, Title2 } from '@fluentui/react-components';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { UserContext } from '../contexts/UserContext';
 import { fetchUser } from '../api/users';
+import { UserContext } from '../contexts/UserContext';
 
 const useStyles = makeStyles({
   header: {
-    width: '100%',
+    borderBottom: '1px solid #ccc',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     height: '32px',
-    border: '2px solid red',
+    padding: '10px 0px',
+    width: '100%',
+  },
+  headerLeft: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px',
+    margin: '0 20px',
+  },
+  headerRight: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px',
+    padding: '0 20px',
   },
 });
 
@@ -38,9 +55,14 @@ export const Header = () => {
 
   return (
     <div className={styles.header}>
-      <span>MicroPost</span>
-      <span>{username}</span>
-      <Button onClick={logout}>ログアウト</Button>
+      <span className={styles.headerLeft}>
+        <Title2>MicroPost</Title2>
+      </span>
+
+      <span className={styles.headerRight}>
+        <Text>{username}</Text>
+        <Button onClick={logout}>ログアウト</Button>
+      </span>
     </div>
   );
 };

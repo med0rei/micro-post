@@ -1,10 +1,29 @@
+import { makeStyles, Title3 } from '@fluentui/react-components';
 import { useContext, useEffect } from 'react';
 import { fetchPosts } from '../api/posts';
 import { PostListContext, type PostType } from '../contexts/PostListContext';
 import { UserContext } from '../contexts/UserContext';
 import { Post } from './Post';
 
+const useStyles = makeStyles({
+  header: {
+    margin: '10px',
+    padding: '10px',
+    width: '720px',
+  },
+  postListContainer: {
+    margin: '20px',
+  },
+  postList: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '10px',
+    margin: '10px',
+  },
+});
+
 export const PostList = () => {
+  const styles = useStyles();
   const { postList, setPostList } = useContext(PostListContext);
   const { userInfo } = useContext(UserContext);
 
@@ -48,11 +67,17 @@ export const PostList = () => {
 
   return (
     <div>
-      <p>PostList</p>
+      <div className={styles.header}>
+        <Title3>PostList</Title3>
+      </div>
 
-      {postList.map((p) => (
-        <Post key={p.id} post={p} />
-      ))}
+      <div className={styles.postListContainer}>
+        <div className={styles.postList}>
+          {postList.map((p) => (
+            <Post key={p.id} post={p} />
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

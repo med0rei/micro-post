@@ -1,4 +1,13 @@
-import { Button, makeStyles, Textarea } from '@fluentui/react-components';
+import {
+  Body1,
+  Button,
+  Card,
+  CardFooter,
+  CardHeader,
+  CardPreview,
+  makeStyles,
+  Textarea,
+} from '@fluentui/react-components';
 import { Send } from 'lucide-react';
 import { useContext, useState } from 'react';
 import { createPost, fetchPosts } from '../api/posts';
@@ -7,9 +16,22 @@ import { UserContext } from '../contexts/UserContext';
 
 const useStyles = makeStyles({
   sidebar: {
-    border: '2px solid blue',
-    width: '30%',
+    borderRight: '1px solid #ccc',
     height: '100%',
+    padding: '10px',
+    width: '30%',
+  },
+  card: {
+    margin: 'auto',
+    maxWidth: '100%',
+    padding: '20px',
+    width: '720px',
+  },
+  userInfo: {
+    marginBottom: '10px',
+  },
+  cardPreview: {
+    marign: '10px',
   },
 });
 
@@ -67,22 +89,32 @@ export const Sidebar = () => {
 
   return (
     <div className={styles.sidebar}>
-      <div>hoge</div>
-      <div>hoge@example.com</div>
+      <Card className={styles.card}>
+        <CardHeader
+          className={styles.userInfo}
+          image={<img alt={`${userInfo.username} avatar`} />}
+          header={
+            <Body1>
+              <b>{userInfo.username}</b>
+              <div>@{userInfo?.username}</div>
+            </Body1>
+          }
+        />
 
-      <div>
-        <Textarea
-          rows={4}
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-        ></Textarea>
-      </div>
+        <CardPreview className={styles.cardPreview}>
+          <Textarea
+            rows={4}
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+          ></Textarea>
+        </CardPreview>
 
-      <div>
-        <Button appearance='primary' icon={<Send />} onClick={onSendClick}>
-          送信
-        </Button>
-      </div>
+        <CardFooter>
+          <Button appearance='primary' icon={<Send />} onClick={onSendClick}>
+            送信
+          </Button>
+        </CardFooter>
+      </Card>
     </div>
   );
 };

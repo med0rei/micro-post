@@ -3,7 +3,6 @@ import { PostList } from './PostList';
 
 const useStyles = makeStyles({
   contents: {
-    border: '2px solid #FF00FF',
     width: '100%',
     height: '100%',
   },

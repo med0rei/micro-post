@@ -2,6 +2,7 @@ import { createContext, type Dispatch, type SetStateAction } from 'react';
 
 export type UserInfo = {
   userId: number;
+  username: string;
   token: string;
 } | null;
 

@@ -20,6 +20,7 @@ export const SignInForm = () => {
       console.log('Sign-in successful:', result.data);
       userContext.setUserInfo({
         userId: result.data.userId,
+        username: result.data.username,
         token: result.data.token,
       });
       navigate('/main');
