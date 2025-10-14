@@ -1,20 +1,17 @@
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import { API_HOST } from './constants';
+import { type ApiResult, handleApiError } from './utils';
 
-export interface SignInResult {
-  success: boolean;
-  data?: any;
-  error?: {
-    message: string;
-    code?: string;
-    status?: number;
-  };
+export interface SignInData {
+  userId: number;
+  username: string;
+  token: string;
 }
 
 export const signIn = async (
   username: string,
   password: string,
-): Promise<SignInResult> => {
+): Promise<ApiResult<SignInData>> => {
   const URL = `${API_HOST}/auth/login`;
 
   try {
@@ -28,43 +25,16 @@ export const signIn = async (
       data: response.data,
     };
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError;
+    const apiError = handleApiError(error);
 
-      if (!axiosError.response) {
-        return {
-          success: false,
-          error: {
-            message: 'サーバーに接続できません',
-            code: 'NETWORK_ERROR',
-          },
-        };
-      }
-      const status = axiosError.response.status;
-
-      const statusMessages: Record<number, string> = {
-        401: 'ユーザー名またはパスワードが間違っています',
-        404: 'サービスが見つかりません',
-        500: 'サーバーエラーが発生しました',
-      };
-
-      return {
-        success: false,
-        error: {
-          message: statusMessages[status] ?? `エラーが発生しました (${status})`,
-          status,
-          code: 'SERVER_ERROR',
-        },
-      };
+    // 401エラーの場合はメッセージをカスタマイズ
+    if (apiError.status === 401) {
+      apiError.message = 'ユーザー名またはパスワードが間違っています';
     }
 
-    // その他のエラー
     return {
       success: false,
-      error: {
-        message: '予期しないエラーが発生しました',
-        code: 'UNKNOWN_ERROR',
-      },
+      error: apiError,
     };
   }
 };
