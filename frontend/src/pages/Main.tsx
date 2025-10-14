@@ -19,7 +19,7 @@ export const Main = () => {
     <PostListContext value={{ postList, setPostList }}>
       <Header />
       <Body>
-        <Sidebar></Sidebar>
+        <Sidebar />
         <Contents />
       </Body>
     </PostListContext>
