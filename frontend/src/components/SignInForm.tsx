@@ -1,4 +1,10 @@
-import { Button, Input, Label, useId } from '@fluentui/react-components';
+import {
+  Button,
+  Input,
+  Label,
+  makeStyles,
+  useId,
+} from '@fluentui/react-components';
 import { LogIn } from 'lucide-react';
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router';
@@ -6,7 +12,29 @@ import { signIn } from '../api/auth';
 import { fetchUser } from '../api/users';
 import { UserContext } from '../contexts/UserContext';
 
+const useStyles = makeStyles({
+  formContainer: {
+    border: '1px solid #ccc',
+    borderRadius: '8px',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '16px',
+    margin: '0 auto',
+    padding: '20px',
+    maxWidth: '400px',
+  },
+  formField: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '8px',
+  },
+  submitButton: {
+    alignSelf: 'flex-end',
+  },
+});
+
 export const SignInForm = () => {
+  const styles = useStyles();
   const userContext = useContext(UserContext);
   const [credentials, setCredentials] = useState({ userId: '', password: '' });
   const navigate = useNavigate();
@@ -40,8 +68,8 @@ export const SignInForm = () => {
   const passwordInputId = useId('password');
 
   return (
-    <div>
-      <div>
+    <div className={styles.formContainer}>
+      <div className={styles.formField}>
         <Label htmlFor={idInputId} size='medium'>
           ID
         </Label>
@@ -54,7 +82,7 @@ export const SignInForm = () => {
         />
       </div>
 
-      <div>
+      <div className={styles.formField}>
         <Label htmlFor={passwordInputId} size='medium'>
           Password
         </Label>
@@ -68,7 +96,7 @@ export const SignInForm = () => {
         />
       </div>
 
-      <div>
+      <div className={styles.submitButton}>
         <Button appearance='primary' icon={<LogIn />} onClick={onSignInClick}>
           Login
         </Button>
