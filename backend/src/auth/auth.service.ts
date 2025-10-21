@@ -113,4 +113,18 @@ export class AuthService {
 
     return result;
   }
+
+  async logout(token: string): Promise<void> {
+    const auth = await this.authRepository.findOne({
+      where: {
+        token: Equal(token),
+      },
+    });
+
+    if (!auth) {
+      throw new UnauthorizedException('Invalid token');
+    }
+
+    await this.authRepository.remove(auth);
+  }
 }
