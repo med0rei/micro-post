@@ -1,6 +1,7 @@
 import { Button, makeStyles, Text, Title2 } from '@fluentui/react-components';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
+import { logout } from '../api/auth';
 import { fetchUser } from '../api/users';
 import { UserContext } from '../contexts/UserContext';
 
@@ -41,8 +42,11 @@ export const Header = () => {
   const [username, setUsername] = useState('');
   const { userInfo, setUserInfo } = useContext(UserContext);
 
-  const logout = () => {
+  const myLogout = () => {
     setUserInfo(null);
+    if (userInfo) {
+      logout(userInfo.token);
+    }
     navigate('/');
   };
 
@@ -67,7 +71,7 @@ export const Header = () => {
 
       <span className={styles.headerRight}>
         <Text>{username}</Text>
-        <Button onClick={logout}>ログアウト</Button>
+        <Button onClick={myLogout}>ログアウト</Button>
       </span>
     </div>
   );
