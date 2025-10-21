@@ -34,7 +34,7 @@ export const POST_CONSTRAINTS = {
 } as const;
 
 export const POST = {
-  id: z.number(),
+  id: z.number().int().positive(),
   content: z
     .string()
     .min(POST_CONSTRAINTS.contentMinLength)
