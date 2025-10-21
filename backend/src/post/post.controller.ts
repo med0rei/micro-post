@@ -1,15 +1,8 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Post,
-  Query,
-  Request,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import { User } from '../shared/decorators/user.decorator';
 import { TokenAuthGuard } from '../shared/guards/token-auth.guard';
 import { ZodValidationPipe } from '../shared/pipes/zod-validation.pipe';
-import type { RequestWithUserDto } from '../shared/types/request-with';
+import type { UserDto } from '../user/schemas/user.schema';
 import { PostService } from './post.service';
 import type {
   CreatePostDto,
@@ -45,12 +38,12 @@ export class PostController {
   @Post()
   @UseGuards(TokenAuthGuard)
   async createPost(
-    @Request() req: RequestWithUserDto,
+    @User() user: UserDto,
     @Body(new ZodValidationPipe(createPostSchema))
     createPostDto: CreatePostDto,
   ): Promise<CreatePostResponseDto> {
     return createPostResponseSchema.parse(
-      await this.postService.createPost(req.user.userId, createPostDto.content),
+      await this.postService.createPost(user.userId, createPostDto.content),
     );
   }
 }
