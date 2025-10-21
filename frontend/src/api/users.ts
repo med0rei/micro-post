@@ -11,7 +11,22 @@ export interface UserInfo {
   updatedAt: string;
 }
 
+export interface CreateUserRequest {
+  username: string;
+  password: string;
+  email: string;
+}
+
+export interface CreateUserResponse {
+  id: number;
+  username: string;
+  email: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export type FetchUserResult = ApiResult<UserInfo>;
+export type CreateUserResult = ApiResult<CreateUserResponse>;
 
 export const fetchUser = async (
   token: string,
@@ -24,6 +39,24 @@ export const fetchUser = async (
       headers: createAuthHeaders(token),
       params: { userId },
     });
+
+    return {
+      success: true,
+      data: response.data,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: handleApiError(error),
+    };
+  }
+};
+
+export const createUser = async (
+  userData: CreateUserRequest,
+): Promise<CreateUserResult> => {
+  try {
+    const response = await axios.post<CreateUserResponse>(BASE_URL, userData);
 
     return {
       success: true,

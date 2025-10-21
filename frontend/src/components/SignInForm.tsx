@@ -2,6 +2,7 @@ import {
   Button,
   Input,
   Label,
+  Link,
   makeStyles,
   useId,
 } from '@fluentui/react-components';
@@ -30,6 +31,10 @@ const useStyles = makeStyles({
   },
   submitButton: {
     alignSelf: 'flex-end',
+  },
+  signUpLink: {
+    textAlign: 'center',
+    fontSize: '14px',
   },
 });
 
@@ -100,6 +105,10 @@ export const SignInForm = () => {
         <Button appearance='primary' icon={<LogIn />} onClick={onSignInClick}>
           Login
         </Button>
+      </div>
+
+      <div className={styles.signUpLink}>
+        新規登録は <Link onClick={() => navigate('/signup')}>こちら</Link>
       </div>
     </div>
   );
