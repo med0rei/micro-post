@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { API_HOST } from './constants';
-import type { ApiResult, Post } from './users';
-import { createAuthHeaders, handleApiError } from './utils';
+import { type ApiResult, type Post, createAuthHeaders, handleApiError } from './utils';
 
 const BASE_URL = `${API_HOST}/posts`;
 

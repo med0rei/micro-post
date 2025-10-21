@@ -11,7 +11,6 @@ import {
   Text,
 } from '@fluentui/react-components';
 import {
-  Ellipsis,
   EllipsisVertical,
   ExternalLink,
   HeartPlus,

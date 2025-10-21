@@ -1,4 +1,5 @@
 import { makeStyles } from '@fluentui/react-components';
+import type { ReactNode } from 'react';
 
 const useStyles = makeStyles({
   body: {
@@ -10,7 +11,7 @@ const useStyles = makeStyles({
   },
 });
 
-export const Body = ({ children }) => {
+export const Body = ({ children }: { children: ReactNode }) => {
   const styles = useStyles();
   return <div className={styles.body}>{children}</div>;
 };

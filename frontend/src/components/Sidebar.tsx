@@ -100,6 +100,10 @@ export const Sidebar = () => {
     await fetchPostList();
   };
 
+  if (!userInfo) {
+    return null;
+  }
+
   return (
     <div className={styles.sidebar}>
       <Card className={styles.card}>
@@ -109,7 +113,7 @@ export const Sidebar = () => {
           header={
             <Body1>
               <b>{userInfo.username}</b>
-              <div>@{userInfo?.username}</div>
+              <div>@{userInfo.username}</div>
             </Body1>
           }
         />

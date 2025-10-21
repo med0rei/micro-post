@@ -1,6 +1,6 @@
-import React from 'react';
+import type { ReactNode } from 'react';
 
-export const SignInLayout = ({ children }) => {
+export const SignInLayout = ({ children }: { children: ReactNode }) => {
   return (
     <div
       className='layout'
