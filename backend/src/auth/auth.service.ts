@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
@@ -32,22 +32,22 @@ export class AuthService {
   ): Promise<UserDto | null> {
     const user: User | null = await this.userService.findOneForAuth(username);
 
-    console.log('User fetched:', user);
     if (!user) {
-      console.log('User not found');
-      return null;
+      throw new UnauthorizedException('Invalid username or password');
     }
 
     try {
       if (await this.hashService.verify(user.passwordHash, password)) {
         return { userId: user.id, username: user.username };
       } else {
-        console.log('Invalid password');
-        return null;
+        throw new UnauthorizedException('Invalid username or password');
       }
     } catch (err) {
-      // internal failure
-      return null;
+      if (err instanceof UnauthorizedException) {
+        throw err;
+      }
+      // Hash verification internal failure
+      throw new UnauthorizedException('Authentication failed');
     }
   }
 
@@ -59,17 +59,17 @@ export class AuthService {
     });
 
     if (!auth) {
-      return null;
+      throw new UnauthorizedException('Invalid token');
     }
 
     const now = new Date();
     if (auth.expiresAt < now) {
-      return null;
+      throw new UnauthorizedException('Token has expired');
     }
 
     const user: User | null = await this.userService.findOneById(auth.userId);
     if (!user) {
-      return null;
+      throw new UnauthorizedException('User not found');
     }
 
     return { userId: user.id, username: user.username };
