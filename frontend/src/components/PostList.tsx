@@ -2,6 +2,7 @@ import { Button, makeStyles, Title3 } from '@fluentui/react-components';
 import { RotateCcw } from 'lucide-react';
 import { useContext, useEffect } from 'react';
 import { fetchPosts } from '../api/posts';
+import type { Post as PostData } from '../api/utils';
 import { PostListContext, type PostType } from '../contexts/PostListContext';
 import { UserContext } from '../contexts/UserContext';
 import { Post } from './Post';
@@ -51,7 +52,7 @@ export const PostList = () => {
 
     setPostList(
       fetchPostsResult.data.map(
-        (post: any): PostType => ({
+        (post: PostData): PostType => ({
           id: post.id,
           content: post.content,
           createdAt: post.createdAt,

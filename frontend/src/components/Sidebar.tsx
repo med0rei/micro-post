@@ -11,6 +11,7 @@ import {
 import { Send } from 'lucide-react';
 import { useContext, useState } from 'react';
 import { createPost, fetchPosts } from '../api/posts';
+import type { Post as PostData } from '../api/utils';
 import { PostListContext, type PostType } from '../contexts/PostListContext';
 import { UserContext } from '../contexts/UserContext';
 
@@ -74,7 +75,7 @@ export const Sidebar = () => {
 
     setPostList(
       fetchPostsResult.data.map(
-        (post: any): PostType => ({
+        (post: PostData): PostType => ({
           id: post.id,
           content: post.content,
           createdAt: post.createdAt,
