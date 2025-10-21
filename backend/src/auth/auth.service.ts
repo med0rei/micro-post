@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 import { Equal } from 'typeorm';
@@ -20,6 +21,8 @@ export class AuthService {
     private readonly hashService: HashService,
 
     private readonly tokenService: TokenService,
+
+    private readonly configService: ConfigService,
   ) {}
 
   async validateUser(
@@ -77,8 +80,10 @@ export class AuthService {
       userId: userDto.userId,
     };
 
+    const expiresInDays =
+      this.configService.get<number>('AUTH_TOKEN_EXPIRES_IN_DAYS') ?? 1;
     const expireDate = new Date();
-    expireDate.setDate(expireDate.getDate() + 1);
+    expireDate.setDate(expireDate.getDate() + expiresInDays);
 
     const auth = await this.authRepository.findOne({
       where: {
