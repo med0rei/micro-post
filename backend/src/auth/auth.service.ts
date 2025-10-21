@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 import { Equal } from 'typeorm';
 import { Auth } from '../auth/entities/auth.entity';
+import type { EnvironmentVariables } from '../config/env.validation';
 import { HashService } from '../hash/hash.service';
 import { TokenService } from '../token/token.service';
 import type { User } from '../user/entities/user.entity';
@@ -22,7 +23,7 @@ export class AuthService {
 
     private readonly tokenService: TokenService,
 
-    private readonly configService: ConfigService,
+    private readonly configService: ConfigService<EnvironmentVariables, true>,
   ) {}
 
   async validateUser(
@@ -80,8 +81,9 @@ export class AuthService {
       userId: userDto.userId,
     };
 
-    const expiresInDays =
-      this.configService.get<number>('AUTH_TOKEN_EXPIRES_IN_DAYS') ?? 1;
+    const expiresInDays = this.configService.get('AUTH_TOKEN_EXPIRES_IN_DAYS', {
+      infer: true,
+    });
     const expireDate = new Date();
     expireDate.setDate(expireDate.getDate() + expiresInDays);
 
