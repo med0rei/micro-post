@@ -99,7 +99,7 @@ export class AuthService {
       await this.authRepository.save({
         userId: userDto.userId,
         token: token,
-        expiresAt: expireDate.toISOString(),
+        expiresAt: expireDate,
       });
       result.token = token;
     }
