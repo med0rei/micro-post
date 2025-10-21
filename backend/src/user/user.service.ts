@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 import { Equal } from 'typeorm';
@@ -55,7 +55,7 @@ export class UserService {
   async createUser(createUserDto: CreateUserDto): Promise<User> {
     const existingUser = await this.findOne(createUserDto.username);
     if (existingUser) {
-      throw new Error('Username already exists');
+      throw new ConflictException('Username already exists');
     }
 
     const createdUser = this.userRepository.create({
