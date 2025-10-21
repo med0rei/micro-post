@@ -1,4 +1,5 @@
-import { makeStyles, Title3 } from '@fluentui/react-components';
+import { Button, makeStyles, Title3 } from '@fluentui/react-components';
+import { RotateCcw } from 'lucide-react';
 import { useContext, useEffect } from 'react';
 import { fetchPosts } from '../api/posts';
 import { PostListContext, type PostType } from '../contexts/PostListContext';
@@ -72,6 +73,12 @@ export const PostList = () => {
     <div className={styles.container}>
       <div className={styles.header}>
         <Title3>PostList</Title3>
+      </div>
+
+      <div className={styles.header}>
+        <Button onClick={fetchPostList} icon={<RotateCcw />}>
+          リロード
+        </Button>
       </div>
 
       <div className={styles.postListContainer}>
