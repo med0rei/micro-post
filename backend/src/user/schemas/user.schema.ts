@@ -3,7 +3,7 @@ import { USER } from '../../shared/constants/entity-validation';
 
 export const userSchema = z
   .object({
-    userId: USER.id,
+    id: USER.id,
     username: USER.username,
   })
   .strict();

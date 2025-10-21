@@ -38,7 +38,7 @@ export class AuthService {
 
     try {
       if (await this.hashService.verify(user.passwordHash, password)) {
-        return { userId: user.id, username: user.username };
+        return { id: user.id, username: user.username };
       } else {
         throw new UnauthorizedException('Invalid username or password');
       }
@@ -72,13 +72,13 @@ export class AuthService {
       throw new UnauthorizedException('User not found');
     }
 
-    return { userId: user.id, username: user.username };
+    return { id: user.id, username: user.username };
   }
 
   async login(userDto: UserDto): Promise<{ token: string; userId: number }> {
     const result = {
       token: '',
-      userId: userDto.userId,
+      userId: userDto.id,
     };
 
     const expiresInDays = this.configService.get('AUTH_TOKEN_EXPIRES_IN_DAYS', {
@@ -89,7 +89,7 @@ export class AuthService {
 
     const auth = await this.authRepository.findOne({
       where: {
-        userId: Equal(userDto.userId),
+        userId: Equal(userDto.id),
       },
     });
 
@@ -104,7 +104,7 @@ export class AuthService {
       // 新しいトークンを作成
       const token = this.tokenService.generateToken();
       await this.authRepository.save({
-        userId: userDto.userId,
+        userId: userDto.id,
         token: token,
         expiresAt: expireDate,
       });

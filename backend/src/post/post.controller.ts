@@ -43,7 +43,7 @@ export class PostController {
     createPostDto: CreatePostDto,
   ): Promise<CreatePostResponseDto> {
     return createPostResponseSchema.parse(
-      await this.postService.createPost(user.userId, createPostDto.content),
+      await this.postService.createPost(user.id, createPostDto.content),
     );
   }
 }
