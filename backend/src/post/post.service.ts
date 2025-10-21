@@ -28,6 +28,7 @@ export class PostService {
       relations: ['user'],
       skip: offset,
       take: limit,
+      order: { createdAt: 'DESC' },
     });
   }
 }
