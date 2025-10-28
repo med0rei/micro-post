@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 import { Equal } from 'typeorm';
@@ -46,7 +50,7 @@ export class UserService {
     });
 
     if (!user) {
-      return null;
+      throw new NotFoundException('User not found');
     }
 
     return user;
