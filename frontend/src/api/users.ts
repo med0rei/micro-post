@@ -29,14 +29,12 @@ export type FetchUserResult = ApiResult<UserInfo>;
 export type CreateUserResult = ApiResult<CreateUserResponse>;
 
 export const fetchUser = async (
-  token: string,
   userId: number,
 ): Promise<FetchUserResult> => {
   const API_URL = `${BASE_URL}/${userId}`;
 
   try {
     const response = await axios.get<UserInfo>(API_URL, {
-      headers: createAuthHeaders(token),
       params: { userId },
     });
 

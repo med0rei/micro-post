@@ -51,10 +51,7 @@ export const SignInForm = () => {
       console.log('Sign-in successful:', result.data);
       userContext.setUserInfo({
         userId: result.data.userId,
-        username: await fetchUser(
-          result.data.token || '',
-          result.data.userId,
-        ).then((res) => {
+        username: await fetchUser(result.data.userId).then((res) => {
           if (res.success && res.data) {
             return res.data.username;
           } else {

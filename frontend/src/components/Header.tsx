@@ -53,7 +53,7 @@ export const Header = () => {
   useEffect(() => {
     const myFetchUser = async () => {
       if (!userInfo) return;
-      const apiResult = await fetchUser(userInfo.token, userInfo.userId);
+      const apiResult = await fetchUser(userInfo.userId);
       if (!apiResult.success || !apiResult.data) {
         console.error(apiResult.error);
         return;
