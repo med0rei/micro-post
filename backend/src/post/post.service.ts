@@ -43,6 +43,40 @@ export class PostService {
     });
   }
 
+  async updatePost(
+    userId: number,
+    postId: number,
+    content: string,
+  ): Promise<MicroPost> {
+    const updateTargetPost: MicroPost | null =
+      await this.microPostsRepository.findOne({
+        where: { id: postId },
+        relations: ['user'],
+      });
+
+    if (!updateTargetPost) {
+      throw new NotFoundException('Post not found');
+    }
+
+    // 更新対象のポストが、リクエストを送信したユーザーのものであることを保証
+    if (updateTargetPost.user.id !== userId) {
+      throw new ForbiddenException('Unauthorized to update this post');
+    }
+
+    await this.microPostsRepository.save({ ...updateTargetPost, content });
+
+    const updatedPost: MicroPost | null =
+      await this.microPostsRepository.findOneOrFail({
+        where: { id: postId },
+        relations: ['user'],
+      });
+
+    if (!updatedPost) {
+      throw new NotFoundException('Updated post not found');
+    }
+    return updatedPost;
+  }
+
   async deletePost(
     userId: number,
     postId: number,

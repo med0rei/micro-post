@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Query,
   UseGuards,
@@ -20,6 +21,9 @@ import type {
   DeletePostResponseDto,
   GetPostListDto,
   GetPostListResponseDto,
+  UpdatePostBodyDto,
+  UpdatePostParamDto,
+  UpdatePostResponseDto,
 } from './schemas/post.schema';
 import {
   createPostResponseSchema,
@@ -28,6 +32,9 @@ import {
   deletePostSchema,
   getPostListResponseSchema,
   getPostListSchema,
+  updatePostBodySchema,
+  updatePostParamSchema,
+  updatePostResponseSchema,
 } from './schemas/post.schema';
 
 @Controller('posts')
@@ -58,6 +65,24 @@ export class PostController {
   ): Promise<CreatePostResponseDto> {
     return createPostResponseSchema.parse(
       await this.postService.createPost(user.id, createPostDto.content),
+    );
+  }
+
+  @Patch(':postId')
+  @UseGuards(TokenAuthGuard)
+  async updatePost(
+    @User() user: UserDto,
+    @Param(new ZodValidationPipe(updatePostParamSchema))
+    updatePostParamDto: UpdatePostParamDto,
+    @Body(new ZodValidationPipe(updatePostBodySchema))
+    updatePostBodyDto: UpdatePostBodyDto,
+  ): Promise<UpdatePostResponseDto> {
+    return updatePostResponseSchema.parse(
+      await this.postService.updatePost(
+        user.id,
+        updatePostParamDto.postId,
+        updatePostBodyDto.content,
+      ),
     );
   }
 
