@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Param,
   Post,
   Query,
   UseGuards,
@@ -60,11 +61,11 @@ export class PostController {
     );
   }
 
-  @Delete()
+  @Delete(':postId')
   @UseGuards(TokenAuthGuard)
   async deletePost(
     @User() user: UserDto,
-    @Body(new ZodValidationPipe(deletePostSchema))
+    @Param(new ZodValidationPipe(deletePostSchema))
     deletePostDto: DeletePostDto,
   ): Promise<DeletePostResponseDto> {
     return deletePostResponseSchema.parse(
