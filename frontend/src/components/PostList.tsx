@@ -1,6 +1,6 @@
-import { Button, makeStyles, Title3 } from '@fluentui/react-components';
+import { Button, Input, makeStyles, Title3 } from '@fluentui/react-components';
 import { RotateCcw } from 'lucide-react';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { fetchPosts } from '../api/posts';
 import type { Post as PostData } from '../api/utils';
 import { PostListContext, type PostType } from '../contexts/PostListContext';
@@ -25,21 +25,27 @@ const useStyles = makeStyles({
     gap: '10px',
     margin: '10px',
   },
+  searchInput: {
+    marginTop: '12px',
+    width: '100%',
+  },
 });
 
 export const PostList = () => {
   const styles = useStyles();
   const { postList, setPostList } = useContext(PostListContext);
   const { userInfo } = useContext(UserContext);
+  const [searchKeyword, setSearchKeyword] = useState<string>('');
 
-  const fetchPostList = async () => {
+  const fetchPostList = async (keyword = searchKeyword) => {
     if (!userInfo) return;
+
     const fetchPostsResult = await fetchPosts(userInfo.token, {
       offset: 0,
       limit: 10,
+      query: keyword,
     });
 
-    console.log(fetchPostsResult);
     if (!fetchPostsResult.success) {
       console.error('Failed to fetch posts:', fetchPostsResult.error);
       return;
@@ -74,10 +80,19 @@ export const PostList = () => {
     <div className={styles.container}>
       <div className={styles.header}>
         <Title3>PostList</Title3>
+        <Input
+          className={styles.searchInput}
+          value={searchKeyword}
+          onChange={(e) => {
+            setSearchKeyword(e.target.value);
+            fetchPostList(e.target.value);
+          }}
+          placeholder='検索キーワードを入力'
+        />
       </div>
 
       <div className={styles.header}>
-        <Button onClick={fetchPostList} icon={<RotateCcw />}>
+        <Button onClick={() => fetchPostList()} icon={<RotateCcw />}>
           リロード
         </Button>
       </div>

@@ -32,12 +32,23 @@ export const createPost = async (
 
 export const fetchPosts = async (
   token: string,
-  { offset = 0, limit = 10 }: { offset?: number; limit?: number } = {},
+  {
+    offset = 0,
+    limit = 10,
+    query,
+  }: { offset?: number; limit?: number; query?: string } = {},
 ): Promise<GetPostsResult> => {
   try {
+    const params: Record<string, number | string> = { offset, limit };
+    const trimmedQuery = query?.trim();
+
+    if (trimmedQuery) {
+      params.query = trimmedQuery;
+    }
+
     const response = await axios.get<Post[]>(BASE_URL, {
       headers: createAuthHeaders(token),
-      params: { offset, limit },
+      params,
     });
 
     return {
