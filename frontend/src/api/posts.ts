@@ -1,6 +1,11 @@
 import axios from 'axios';
 import { API_HOST } from './constants';
-import { type ApiResult, type Post, createAuthHeaders, handleApiError } from './utils';
+import {
+  type ApiResult,
+  type Post,
+  createAuthHeaders,
+  handleApiError,
+} from './utils';
 
 const BASE_URL = `${API_HOST}/posts`;
 
@@ -70,10 +75,9 @@ export const deletePost = async (
 ): Promise<DeletePostResult> => {
   try {
     const response = await axios.delete<{ postId: number }>(
-      BASE_URL,
+      `${BASE_URL}/${postId}`,
       {
         headers: createAuthHeaders(token),
-        data: { postId },
       },
     );
 

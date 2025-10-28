@@ -26,13 +26,16 @@ import {
   ToastBody,
   useToastController,
   type JSXElement,
+  Textarea,
 } from '@fluentui/react-components';
 import {
   EllipsisVertical,
   ExternalLink,
   HeartPlus,
+  Pencil,
   Repeat2,
   Reply,
+  Save,
   Trash2,
   UserPlus,
 } from 'lucide-react';
@@ -54,15 +57,27 @@ const useStyles = makeStyles({
     marginLeft: '20px',
     marginTop: '5px',
   },
+  textarea: {
+    width: '100%',
+  },
+  saveButton: {
+    marginTop: '12px',
+  },
 });
 
 export const Post = ({ post }: { post: PostType }): JSXElement => {
   const styles = useStyles();
+
   const { userInfo } = useContext(UserContext);
   const { postList, setPostList } = useContext(PostListContext);
+
   const { toasterId } = useContext(ToasterContext);
   const { dispatchToast } = useToastController(toasterId);
+
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedContent, setEditedContent] = useState<string>(post.content);
 
   const handleDeleteConfirm = async () => {
     if (!userInfo) return;
@@ -120,12 +135,21 @@ export const Post = ({ post }: { post: PostType }): JSXElement => {
             <MenuPopover>
               <MenuList>
                 {isOwnPost && (
-                  <MenuItem
-                    icon={<Trash2 />}
-                    onClick={() => setDeleteDialogOpen(true)}
-                  >
-                    削除
-                  </MenuItem>
+                  <>
+                    <MenuItem
+                      icon={<Pencil />}
+                      onClick={() => setIsEditing(true)}
+                    >
+                      編集
+                    </MenuItem>
+
+                    <MenuItem
+                      icon={<Trash2 />}
+                      onClick={() => setDeleteDialogOpen(true)}
+                    >
+                      削除
+                    </MenuItem>
+                  </>
                 )}
               </MenuList>
             </MenuPopover>
@@ -134,7 +158,28 @@ export const Post = ({ post }: { post: PostType }): JSXElement => {
       />
 
       <CardPreview>
-        <Text className={styles.cardPreview}>{post.content}</Text>
+        {isEditing ? (
+          <div>
+            <Textarea
+              className={styles.textarea}
+              rows={4}
+              value={editedContent}
+              onChange={(e) => setEditedContent(e.target.value)}
+            />
+            <Button
+              className={styles.saveButton}
+              appearance='primary'
+              icon={<Save />}
+              onClick={() => {
+                setIsEditing(false);
+              }}
+            >
+              保存
+            </Button>
+          </div>
+        ) : (
+          <Text className={styles.cardPreview}>{post.content}</Text>
+        )}
       </CardPreview>
 
       <CardFooter>
