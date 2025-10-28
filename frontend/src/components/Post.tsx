@@ -97,6 +97,7 @@ export const Post = ({ post }: { post: PostType }): JSXElement => {
         setDeleteDialogOpen(false);
       }
     });
+  };
 
   const myUpdatePost = () => {
     if (!userInfo) return;
