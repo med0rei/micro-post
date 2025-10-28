@@ -42,7 +42,6 @@ export class PostController {
   constructor(private readonly postService: PostService) {}
 
   @Get()
-  @UseGuards(TokenAuthGuard)
   async getPostList(
     @Query(new ZodValidationPipe(getPostListSchema))
     getPostListDto: GetPostListDto,

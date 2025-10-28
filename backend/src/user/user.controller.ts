@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  UseGuards,
-  UsePipes,
-} from '@nestjs/common';
-import { TokenAuthGuard } from '../shared/guards/token-auth.guard';
+import { Body, Controller, Get, Param, Post, UsePipes } from '@nestjs/common';
 import { ZodValidationPipe } from '../shared/pipes/zod-validation.pipe';
 import type {
   CreateUserDto,
@@ -38,7 +29,6 @@ export class UserController {
   }
 
   @Get(':userId')
-  @UseGuards(TokenAuthGuard)
   async getUser(
     @Param(new ZodValidationPipe(getUserSchema)) getUserDto: GetUserDto,
   ): Promise<GetUserResponseDto> {
