@@ -1,4 +1,4 @@
-import type { JSXElement } from '@fluentui/react-components';
+import { format } from 'date-fns';
 import {
   Body1,
   Button,
@@ -7,8 +7,25 @@ import {
   CardFooter,
   CardHeader,
   CardPreview,
+  Dialog,
+  DialogActions,
+  DialogBody,
+  DialogContent,
+  DialogSurface,
+  DialogTitle,
+  DialogTrigger,
   makeStyles,
+  Menu,
+  MenuItem,
+  MenuList,
+  MenuPopover,
+  MenuTrigger,
   Text,
+  Toast,
+  ToastTitle,
+  ToastBody,
+  useToastController,
+  type JSXElement,
 } from '@fluentui/react-components';
 import {
   EllipsisVertical,
@@ -16,10 +33,14 @@ import {
   HeartPlus,
   Repeat2,
   Reply,
+  Trash2,
   UserPlus,
 } from 'lucide-react';
-import { format } from 'date-fns';
-import type { PostType } from '../contexts/PostListContext';
+import { useContext, useState } from 'react';
+import { deletePost } from '../api/posts';
+import { PostListContext, type PostType } from '../contexts/PostListContext';
+import { ToasterContext } from '../contexts/ToasterContext';
+import { UserContext } from '../contexts/UserContext';
 
 const useStyles = makeStyles({
   card: {
@@ -37,6 +58,33 @@ const useStyles = makeStyles({
 
 export const Post = ({ post }: { post: PostType }): JSXElement => {
   const styles = useStyles();
+  const { userInfo } = useContext(UserContext);
+  const { postList, setPostList } = useContext(PostListContext);
+  const { toasterId } = useContext(ToasterContext);
+  const { dispatchToast } = useToastController(toasterId);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
+  const handleDeleteConfirm = async () => {
+    if (!userInfo) return;
+
+    const result = await deletePost(userInfo.token, post.id);
+
+    if (result.success) {
+      setPostList(postList.filter((p) => p.id !== post.id));
+      setDeleteDialogOpen(false);
+    } else {
+      dispatchToast(
+        <Toast>
+          <ToastTitle>ポストの削除に失敗しました</ToastTitle>
+          <ToastBody>{result.error}</ToastBody>
+        </Toast>,
+        { intent: 'error' },
+      );
+      setDeleteDialogOpen(false);
+    }
+  };
+
+  const isOwnPost = userInfo?.userId === post.user.id;
 
   return (
     <Card className={styles.card}>
@@ -61,11 +109,27 @@ export const Post = ({ post }: { post: PostType }): JSXElement => {
           </Caption1>
         }
         action={
-          <Button
-            appearance='transparent'
-            icon={<EllipsisVertical />}
-            aria-label='More options'
-          />
+          <Menu>
+            <MenuTrigger>
+              <Button
+                appearance='transparent'
+                icon={<EllipsisVertical />}
+                aria-label='More options'
+              />
+            </MenuTrigger>
+            <MenuPopover>
+              <MenuList>
+                {isOwnPost && (
+                  <MenuItem
+                    icon={<Trash2 />}
+                    onClick={() => setDeleteDialogOpen(true)}
+                  >
+                    削除
+                  </MenuItem>
+                )}
+              </MenuList>
+            </MenuPopover>
+          </Menu>
         }
       />
 
@@ -79,6 +143,35 @@ export const Post = ({ post }: { post: PostType }): JSXElement => {
         <Button icon={<Repeat2 />}>Repost</Button>
         <Button icon={<ExternalLink />}>Share</Button>
       </CardFooter>
+
+      <Dialog
+        open={deleteDialogOpen}
+        onOpenChange={(_, data) => setDeleteDialogOpen(data.open)}
+      >
+        <DialogSurface>
+          <DialogBody>
+            <DialogTitle>
+              <Trash2 /> ポストの削除
+            </DialogTitle>
+            <DialogContent>
+              <p>このポストを削除しますか？ </p>
+              <p>この操作は取り消せません。</p>
+            </DialogContent>
+            <DialogActions>
+              <DialogTrigger disableButtonEnhancement>
+                <Button appearance='secondary'>キャンセル</Button>
+              </DialogTrigger>
+              <Button
+                appearance='primary'
+                style={{ backgroundColor: '#d13438' }}
+                onClick={handleDeleteConfirm}
+              >
+                削除
+              </Button>
+            </DialogActions>
+          </DialogBody>
+        </DialogSurface>
+      </Dialog>
     </Card>
   );
 };

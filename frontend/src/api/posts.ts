@@ -6,6 +6,7 @@ const BASE_URL = `${API_HOST}/posts`;
 
 export type CreatePostResult = ApiResult<Post>;
 export type GetPostsResult = ApiResult<Post[]>;
+export type DeletePostResult = ApiResult<{ postId: number }>;
 
 export const createPost = async (
   token: string,
@@ -50,6 +51,31 @@ export const fetchPosts = async (
       headers: createAuthHeaders(token),
       params,
     });
+
+    return {
+      success: true,
+      data: response.data,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: handleApiError(error),
+    };
+  }
+};
+
+export const deletePost = async (
+  token: string,
+  postId: number,
+): Promise<DeletePostResult> => {
+  try {
+    const response = await axios.delete<{ postId: number }>(
+      BASE_URL,
+      {
+        headers: createAuthHeaders(token),
+        data: { postId },
+      },
+    );
 
     return {
       success: true,
