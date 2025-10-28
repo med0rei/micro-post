@@ -45,5 +45,6 @@ export const POST = {
   getPostList: {
     offset: z.coerce.number().min(0),
     limit: z.coerce.number().min(1),
+    query: z.string().optional(),
   } as const,
 } as const;

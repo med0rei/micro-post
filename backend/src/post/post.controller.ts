@@ -43,6 +43,7 @@ export class PostController {
       await this.postService.getPostList(
         getPostListDto.offset,
         getPostListDto.limit,
+        getPostListDto.query,
       ),
     );
   }

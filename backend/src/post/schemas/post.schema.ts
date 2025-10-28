@@ -27,6 +27,9 @@ export const getPostListSchema = z
   .object({
     offset: POST.getPostList.offset,
     limit: POST.getPostList.limit,
+    query: POST.getPostList.query.transform((value) =>
+      value?.trim() ? value.trim() : undefined,
+    ),
   })
   .strict();
 

@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { MicroPost } from './entities/micro-post.entity';
 
 @Injectable()
@@ -27,8 +27,15 @@ export class PostService {
     });
   }
 
-  async getPostList(offset: number, limit: number): Promise<MicroPost[]> {
+  async getPostList(
+    offset: number,
+    limit: number,
+    query?: string,
+  ): Promise<MicroPost[]> {
+    const trimmedQuery = query?.trim();
+
     return this.microPostsRepository.find({
+      where: trimmedQuery ? { content: ILike(`%${trimmedQuery}%`) } : undefined,
       relations: ['user'],
       skip: offset,
       take: limit,
