@@ -1,5 +1,5 @@
 import { Button, Input, makeStyles, Title3 } from '@fluentui/react-components';
-import { RotateCcw } from 'lucide-react';
+import { ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react';
 import { useContext, useEffect, useState } from 'react';
 import { fetchPosts } from '../api/posts';
 import type { Post as PostData } from '../api/utils';
@@ -29,20 +29,81 @@ const useStyles = makeStyles({
     marginTop: '12px',
     width: '100%',
   },
+  paginationContainer: {
+    alignItems: 'center',
+    display: 'flex',
+    gap: '16px',
+    justifyContent: 'center',
+    margin: '20px',
+    padding: '10px',
+  },
+  pageInfo: {
+    fontSize: '14px',
+    minWidth: '100px',
+    textAlign: 'center',
+  },
 });
+
+const PaginationButtons = ({
+  currentPage,
+  hasNextPage,
+  onPrevious,
+  onNext,
+  styles,
+}: {
+  currentPage: number;
+  hasNextPage: boolean;
+  onPrevious: () => void;
+  onNext: () => void;
+  styles: ReturnType<typeof useStyles>;
+}) => {
+  return (
+    <div className={styles.paginationContainer}>
+      <Button
+        appearance='secondary'
+        icon={<ChevronLeft />}
+        disabled={currentPage === 1}
+        onClick={onPrevious}
+      >
+        前のページ
+      </Button>
+      <div className={styles.pageInfo}>ページ{currentPage}</div>
+      <Button
+        appearance='secondary'
+        icon={<ChevronRight />}
+        iconPosition='after'
+        disabled={!hasNextPage}
+        onClick={onNext}
+      >
+        次のページ
+      </Button>
+    </div>
+  );
+};
 
 export const PostList = () => {
   const styles = useStyles();
+
   const { postList, setPostList } = useContext(PostListContext);
   const { userInfo } = useContext(UserContext);
-  const [searchKeyword, setSearchKeyword] = useState<string>('');
 
-  const fetchPostList = async (keyword = searchKeyword) => {
+  const [searchKeyword, setSearchKeyword] = useState<string>('');
+  const [currentPageNumber, setCurrentPageNumber] = useState<number>(1);
+  const [hasNextPage, setHasNextPage] = useState<boolean>(false);
+
+  const POSTS_PER_PAGE = 10;
+
+  const fetchPostList = async (
+    pageNumber: number = currentPageNumber,
+    keyword: string = searchKeyword,
+  ) => {
     if (!userInfo) return;
 
+    const offset: number = (pageNumber - 1) * POSTS_PER_PAGE;
+
     const fetchPostsResult = await fetchPosts(userInfo.token, {
-      offset: 0,
-      limit: 10,
+      offset,
+      limit: POSTS_PER_PAGE,
       query: keyword,
     });
 
@@ -70,10 +131,28 @@ export const PostList = () => {
         }),
       ),
     );
+
+    setHasNextPage(fetchPostsResult.data.length === POSTS_PER_PAGE);
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPageNumber > 1) {
+      const newPageNumber = currentPageNumber - 1;
+      setCurrentPageNumber(newPageNumber);
+      fetchPostList(newPageNumber);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (hasNextPage) {
+      const newPageNumber = currentPageNumber + 1;
+      setCurrentPageNumber(newPageNumber);
+      fetchPostList(newPageNumber);
+    }
   };
 
   useEffect(() => {
-    fetchPostList();
+    fetchPostList(1);
   }, []);
 
   return (
@@ -84,18 +163,31 @@ export const PostList = () => {
           className={styles.searchInput}
           value={searchKeyword}
           onChange={(e) => {
-            setSearchKeyword(e.target.value);
-            fetchPostList(e.target.value);
+            const newKeyword = e.target.value;
+            setSearchKeyword(newKeyword);
+            setCurrentPageNumber(1);
+            fetchPostList(1, newKeyword);
           }}
           placeholder='検索キーワードを入力'
         />
       </div>
 
       <div className={styles.header}>
-        <Button onClick={() => fetchPostList()} icon={<RotateCcw />}>
+        <Button
+          onClick={() => fetchPostList(currentPageNumber)}
+          icon={<RotateCcw />}
+        >
           リロード
         </Button>
       </div>
+
+      <PaginationButtons
+        currentPage={currentPageNumber}
+        hasNextPage={hasNextPage}
+        onPrevious={handlePreviousPage}
+        onNext={handleNextPage}
+        styles={styles}
+      />
 
       <div className={styles.postListContainer}>
         <div className={styles.postList}>
@@ -104,6 +196,14 @@ export const PostList = () => {
           ))}
         </div>
       </div>
+
+      <PaginationButtons
+        currentPage={currentPageNumber}
+        hasNextPage={hasNextPage}
+        onPrevious={handlePreviousPage}
+        onNext={handleNextPage}
+        styles={styles}
+      />
     </div>
   );
 };
