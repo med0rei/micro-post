@@ -40,7 +40,7 @@ import {
   UserPlus,
 } from 'lucide-react';
 import { useContext, useState } from 'react';
-import { deletePost } from '../api/posts';
+import { deletePost, updatePost } from '../api/posts';
 import { PostListContext, type PostType } from '../contexts/PostListContext';
 import { ToasterContext } from '../contexts/ToasterContext';
 import { UserContext } from '../contexts/UserContext';
@@ -97,6 +97,28 @@ export const Post = ({ post }: { post: PostType }): JSXElement => {
       );
       setDeleteDialogOpen(false);
     }
+  };
+
+  const myUpdatePost = () => {
+    if (!userInfo) return;
+
+    setPostList(
+      postList.map((p) =>
+        p.id === post.id ? { ...p, content: editedContent } : p,
+      ),
+    );
+
+    updatePost(userInfo.token, post.id, editedContent).then((result) => {
+      if (!result.success) {
+        dispatchToast(
+          <Toast>
+            <ToastTitle>ポストの更新に失敗しました</ToastTitle>
+            <ToastBody>{result.error}</ToastBody>
+          </Toast>,
+          { intent: 'error' },
+        );
+      }
+    });
   };
 
   const isOwnPost = userInfo?.userId === post.user.id;
@@ -172,6 +194,7 @@ export const Post = ({ post }: { post: PostType }): JSXElement => {
               icon={<Save />}
               onClick={() => {
                 setIsEditing(false);
+                myUpdatePost();
               }}
             >
               保存

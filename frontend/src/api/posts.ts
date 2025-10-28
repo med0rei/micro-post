@@ -11,6 +11,7 @@ const BASE_URL = `${API_HOST}/posts`;
 
 export type CreatePostResult = ApiResult<Post>;
 export type GetPostsResult = ApiResult<Post[]>;
+export type UpdatePostResult = ApiResult<Post>;
 export type DeletePostResult = ApiResult<{ postId: number }>;
 
 export const createPost = async (
@@ -56,6 +57,30 @@ export const fetchPosts = async (
       headers: createAuthHeaders(token),
       params,
     });
+
+    return {
+      success: true,
+      data: response.data,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: handleApiError(error),
+    };
+  }
+};
+
+export const updatePost = async (
+  token: string,
+  postId: number,
+  content: string,
+): Promise<UpdatePostResult> => {
+  try {
+    const response = await axios.patch<Post>(
+      `${BASE_URL}/${postId}`,
+      { content },
+      { headers: createAuthHeaders(token) },
+    );
 
     return {
       success: true,
