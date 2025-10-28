@@ -82,22 +82,21 @@ export const Post = ({ post }: { post: PostType }): JSXElement => {
   const handleDeleteConfirm = async () => {
     if (!userInfo) return;
 
-    const result = await deletePost(userInfo.token, post.id);
-
-    if (result.success) {
-      setPostList(postList.filter((p) => p.id !== post.id));
-      setDeleteDialogOpen(false);
-    } else {
-      dispatchToast(
-        <Toast>
-          <ToastTitle>ポストの削除に失敗しました</ToastTitle>
-          <ToastBody>{result.error}</ToastBody>
-        </Toast>,
-        { intent: 'error' },
-      );
-      setDeleteDialogOpen(false);
-    }
-  };
+    deletePost(userInfo.token, post.id).then((result) => {
+      if (result.success) {
+        setPostList(postList.filter((p) => p.id !== post.id));
+        setDeleteDialogOpen(false);
+      } else {
+        dispatchToast(
+          <Toast>
+            <ToastTitle>ポストの削除に失敗しました</ToastTitle>
+            <ToastBody>{result.error}</ToastBody>
+          </Toast>,
+          { intent: 'error' },
+        );
+        setDeleteDialogOpen(false);
+      }
+    });
 
   const myUpdatePost = () => {
     if (!userInfo) return;
