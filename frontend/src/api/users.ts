@@ -28,15 +28,11 @@ export interface CreateUserResponse {
 export type FetchUserResult = ApiResult<UserInfo>;
 export type CreateUserResult = ApiResult<CreateUserResponse>;
 
-export const fetchUser = async (
-  userId: number,
-): Promise<FetchUserResult> => {
+export const fetchUser = async (userId: number): Promise<FetchUserResult> => {
   const API_URL = `${BASE_URL}/${userId}`;
 
   try {
-    const response = await axios.get<UserInfo>(API_URL, {
-      params: { userId },
-    });
+    const response = await axios.get<UserInfo>(API_URL);
 
     return {
       success: true,
