@@ -82,6 +82,9 @@ const PaginationButtons = ({
 };
 
 export const PostList = () => {
+  const POSTS_PER_PAGE = 10;
+  const AUTO_RELOAD_SECONDS = 30;
+
   const styles = useStyles();
 
   const { postList, setPostList } = useContext(PostListContext);
@@ -90,8 +93,6 @@ export const PostList = () => {
   const [searchKeyword, setSearchKeyword] = useState<string>('');
   const [currentPageNumber, setCurrentPageNumber] = useState<number>(1);
   const [hasNextPage, setHasNextPage] = useState<boolean>(false);
-
-  const POSTS_PER_PAGE = 10;
 
   const fetchPostList = async (
     pageNumber: number = currentPageNumber,
@@ -154,6 +155,14 @@ export const PostList = () => {
   useEffect(() => {
     fetchPostList(1);
   }, []);
+
+  useEffect(() => {
+    const intervalId: number = setInterval(() => {
+      fetchPostList(currentPageNumber, searchKeyword);
+    }, AUTO_RELOAD_SECONDS * 1000);
+
+    return () => clearInterval(intervalId);
+  }, [currentPageNumber, searchKeyword]);
 
   return (
     <div className={styles.container}>
