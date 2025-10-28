@@ -30,6 +30,18 @@ export const getPostListSchema = z
   })
   .strict();
 
+export const deletePostSchema = z
+  .object({
+    postId: POST.id,
+  })
+  .strict();
+
+export const deletePostResponseSchema = z
+  .object({
+    postId: POST.id,
+  })
+  .strict();
+
 export const createPostResponseSchema = publicMicroPostSchema;
 export const getPostListResponseSchema = z.array(publicMicroPostSchema);
 
@@ -38,5 +50,7 @@ export type MicroPost = z.infer<typeof microPostSchema>;
 export type PublicMicroPost = z.infer<typeof publicMicroPostSchema>;
 export type CreatePostDto = z.infer<typeof createPostSchema>;
 export type CreatePostResponseDto = z.infer<typeof createPostResponseSchema>;
+export type DeletePostDto = z.infer<typeof deletePostSchema>;
+export type DeletePostResponseDto = z.infer<typeof deletePostResponseSchema>;
 export type GetPostListDto = z.infer<typeof getPostListSchema>;
 export type GetPostListResponseDto = z.infer<typeof getPostListResponseSchema>;

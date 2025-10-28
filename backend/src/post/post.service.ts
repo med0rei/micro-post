@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { MicroPost } from './entities/micro-post.entity';
@@ -30,5 +34,29 @@ export class PostService {
       take: limit,
       order: { createdAt: 'DESC' },
     });
+  }
+
+  async deletePost(
+    userId: number,
+    postId: number,
+  ): Promise<{ postId: number }> {
+    const deletionTargetPost: MicroPost | null =
+      await this.microPostsRepository.findOne({
+        where: { id: postId },
+        relations: ['user'],
+      });
+
+    if (!deletionTargetPost) {
+      throw new NotFoundException('Post not found');
+    }
+
+    // 削除対象のポストが、リクエストを送信したユーザーのものであることを保証
+    if (deletionTargetPost.user.id !== userId) {
+      throw new ForbiddenException('Unauthorized to delete this post');
+    }
+
+    await this.microPostsRepository.delete({ id: postId });
+
+    return { postId: postId };
   }
 }

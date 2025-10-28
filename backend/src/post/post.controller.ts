@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { User } from '../shared/decorators/user.decorator';
 import { TokenAuthGuard } from '../shared/guards/token-auth.guard';
 import { ZodValidationPipe } from '../shared/pipes/zod-validation.pipe';
@@ -7,12 +15,16 @@ import { PostService } from './post.service';
 import type {
   CreatePostDto,
   CreatePostResponseDto,
+  DeletePostDto,
+  DeletePostResponseDto,
   GetPostListDto,
   GetPostListResponseDto,
 } from './schemas/post.schema';
 import {
   createPostResponseSchema,
   createPostSchema,
+  deletePostResponseSchema,
+  deletePostSchema,
   getPostListResponseSchema,
   getPostListSchema,
 } from './schemas/post.schema';
@@ -44,6 +56,18 @@ export class PostController {
   ): Promise<CreatePostResponseDto> {
     return createPostResponseSchema.parse(
       await this.postService.createPost(user.id, createPostDto.content),
+    );
+  }
+
+  @Delete()
+  @UseGuards(TokenAuthGuard)
+  async deletePost(
+    @User() user: UserDto,
+    @Body(new ZodValidationPipe(deletePostSchema))
+    deletePostDto: DeletePostDto,
+  ): Promise<DeletePostResponseDto> {
+    return deletePostResponseSchema.parse(
+      await this.postService.deletePost(user.id, deletePostDto.postId),
     );
   }
 }
