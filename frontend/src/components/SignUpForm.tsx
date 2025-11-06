@@ -37,7 +37,7 @@ const useStyles = makeStyles({
 
 export const SignUpForm = () => {
   const styles = useStyles();
-  const [userData, setUserData] = useState({
+  const [credentials, setCredentials] = useState({
     username: '',
     password: '',
     email: '',
@@ -49,7 +49,7 @@ export const SignUpForm = () => {
     setError(null);
     console.log('onSignUpClick');
 
-    const result = await createUser(userData);
+    const result = await createUser(credentials);
     if (result.success && result.data) {
       console.log('Sign-up successful:', result.data);
       navigate('/');
@@ -71,9 +71,9 @@ export const SignUpForm = () => {
         </Label>
         <Input
           id={usernameInputId}
-          value={userData.username}
+          value={credentials.username}
           onChange={(e) => {
-            setUserData({ ...userData, username: e.target.value });
+            setCredentials({ ...credentials, username: e.target.value });
           }}
         />
       </div>
@@ -85,9 +85,9 @@ export const SignUpForm = () => {
         <Input
           id={passwordInputId}
           type='password'
-          value={userData.password}
+          value={credentials.password}
           onChange={(e) => {
-            setUserData({ ...userData, password: e.target.value });
+            setCredentials({ ...credentials, password: e.target.value });
           }}
         />
       </div>
@@ -99,9 +99,9 @@ export const SignUpForm = () => {
         <Input
           id={emailInputId}
           type='email'
-          value={userData.email}
+          value={credentials.email}
           onChange={(e) => {
-            setUserData({ ...userData, email: e.target.value });
+            setCredentials({ ...credentials, email: e.target.value });
           }}
         />
       </div>
