@@ -56,8 +56,7 @@ export const Sidebar = () => {
   const { setPostList } = useContext(PostListContext);
 
   const fetchPostList = async () => {
-    if (!userInfo) return;
-    const fetchPostsResult = await fetchPosts(userInfo.token, {
+    const fetchPostsResult = await fetchPosts(userInfo?.token, {
       offset: 0,
       limit: 10,
     });

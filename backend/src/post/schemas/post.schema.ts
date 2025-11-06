@@ -30,6 +30,7 @@ export const getPostListSchema = z
     query: POST.getPostList.query.transform((value) =>
       value?.trim() ? value.trim() : undefined,
     ),
+    userId: POST.getPostList.userId,
   })
   .strict();
 

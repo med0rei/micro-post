@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
+import { FindOperator } from 'typeorm/browser';
 import { MicroPost } from './entities/micro-post.entity';
 
 @Injectable()
@@ -31,11 +32,28 @@ export class PostService {
     offset: number,
     limit: number,
     query?: string,
+    userId?: number,
   ): Promise<MicroPost[]> {
     const trimmedQuery = query?.trim();
 
+    const whereConditions: Array<{
+      content?: FindOperator<string>;
+      user?: { id: number };
+    }> = [];
+
+    if (trimmedQuery && userId) {
+      whereConditions.push({
+        content: ILike(`%${trimmedQuery}%`),
+        user: { id: userId },
+      });
+    } else if (trimmedQuery) {
+      whereConditions.push({ content: ILike(`%${trimmedQuery}%`) });
+    } else if (userId) {
+      whereConditions.push({ user: { id: userId } });
+    }
+
     return this.microPostsRepository.find({
-      where: trimmedQuery ? { content: ILike(`%${trimmedQuery}%`) } : undefined,
+      where: whereConditions.length > 0 ? whereConditions[0] : undefined,
       relations: ['user'],
       skip: offset,
       take: limit,

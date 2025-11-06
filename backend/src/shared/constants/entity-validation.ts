@@ -46,5 +46,6 @@ export const POST = {
     offset: z.coerce.number().min(0),
     limit: z.coerce.number().min(1),
     query: z.string().optional(),
+    userId: z.coerce.number().int().positive().optional(),
   } as const,
 } as const;

@@ -98,11 +98,9 @@ export const PostList = () => {
     pageNumber: number = currentPageNumber,
     keyword: string = searchKeyword,
   ) => {
-    if (!userInfo) return;
-
     const offset: number = (pageNumber - 1) * POSTS_PER_PAGE;
 
-    const fetchPostsResult = await fetchPosts(userInfo.token, {
+    const fetchPostsResult = await fetchPosts(userInfo?.token, {
       offset,
       limit: POSTS_PER_PAGE,
       query: keyword,

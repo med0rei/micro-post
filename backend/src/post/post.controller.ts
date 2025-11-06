@@ -51,6 +51,7 @@ export class PostController {
         getPostListDto.offset,
         getPostListDto.limit,
         getPostListDto.query,
+        getPostListDto.userId,
       ),
     );
   }
