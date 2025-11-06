@@ -40,6 +40,7 @@ import {
   UserPlus,
 } from 'lucide-react';
 import { useContext, useState } from 'react';
+import { Link } from 'react-router';
 import { deletePost, updatePost } from '../api/posts';
 import { PostListContext, type PostType } from '../contexts/PostListContext';
 import { ToasterContext } from '../contexts/ToasterContext';
@@ -129,7 +130,9 @@ export const Post = ({ post }: { post: PostType }): JSXElement => {
         image={<img alt={`${post.user.username} avatar`} />}
         header={
           <Body1>
-            <b>{post.user.username}</b>
+            <Link to={`/users/${post.user.id}`}>
+              <b>{post.user.username}</b>
+            </Link>
             <span>
               <Button
                 appearance='transparent'
