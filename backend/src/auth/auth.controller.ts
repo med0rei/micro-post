@@ -31,7 +31,9 @@ export class AuthController {
 
   @Delete('logout')
   @UseGuards(TokenAuthGuard)
-  async logout(@Headers('authorization') authorization?: string): Promise<void> {
+  async logout(
+    @Headers('authorization') authorization?: string,
+  ): Promise<void> {
     const token = authorization?.replace('Bearer ', '');
     if (!token) {
       throw new UnauthorizedException('Token not found');
