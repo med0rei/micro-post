@@ -49,9 +49,42 @@ export const getUserResponseSchema = z
   })
   .strip();
 
+export const updateUserParamSchema = z
+  .object({
+    userId: USER.id,
+  })
+  .strict();
+
+export const updateUserBodySchema = z
+  .object({
+    username: USER.username.optional(),
+    email: USER.email.optional(),
+  })
+  .strict()
+  .refine(
+    (val) => {
+      return val.username !== undefined || val.email !== undefined;
+    },
+    {
+      message: 'At least one field must be provided',
+    },
+  );
+
+export const updateUserResponseSchema = z
+  .object({
+    id: USER.id,
+    username: USER.username,
+    email: USER.email,
+    updatedAt: USER.updatedAt,
+  })
+  .strip();
+
 export type UserDto = z.infer<typeof userSchema>;
 export type PublicUserDto = z.infer<typeof publicUserSchema>;
 export type CreateUserDto = z.infer<typeof createUserSchema>;
 export type CreateUserResponseDto = z.infer<typeof createUserResponseSchema>;
 export type GetUserDto = z.infer<typeof getUserSchema>;
 export type GetUserResponseDto = z.infer<typeof getUserResponseSchema>;
+export type UpdateUserParamDto = z.infer<typeof updateUserParamSchema>;
+export type UpdateUserBodyDto = z.infer<typeof updateUserBodySchema>;
+export type UpdateUserResponseDto = z.infer<typeof updateUserResponseSchema>;
