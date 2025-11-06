@@ -1,6 +1,6 @@
 import { Button, makeStyles, Text, Title2 } from '@fluentui/react-components';
 import { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { logout } from '../api/auth';
 import { fetchUser } from '../api/users';
 import { UserContext } from '../contexts/UserContext';
@@ -66,7 +66,9 @@ export const Header = () => {
   return (
     <div className={styles.header}>
       <span className={styles.headerLeft}>
-        <Title2>MicroPost</Title2>
+        <Link to='/main' style={{ color: 'inherit', textDecoration: 'none' }}>
+          <Title2>MicroPost</Title2>
+        </Link>
       </span>
 
       <span className={styles.headerRight}>
