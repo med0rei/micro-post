@@ -2,13 +2,12 @@ import {
   Button,
   Input,
   Label,
-  Link,
   makeStyles,
   useId,
 } from '@fluentui/react-components';
 import { LogIn } from 'lucide-react';
 import { useContext, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { signIn } from '../api/auth';
 import { fetchUser } from '../api/users';
 import { UserContext } from '../contexts/UserContext';
@@ -105,7 +104,7 @@ export const SignInForm = () => {
       </div>
 
       <div className={styles.signUpLink}>
-        新規登録は <Link onClick={() => navigate('/signup')}>こちら</Link>
+        新規登録は<Link to={'/signup'}>こちら</Link>
       </div>
     </div>
   );
