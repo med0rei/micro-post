@@ -43,6 +43,7 @@ import {
   updateUser,
 } from '../api/users';
 import type { Post as PostData } from '../api/utils';
+import { PostListContext } from '../contexts/PostListContext';
 import { ToasterContext } from '../contexts/ToasterContext';
 import { UserContext } from '../contexts/UserContext';
 import { Post } from './Post';
@@ -404,56 +405,58 @@ const UserPosts = ({ userId }: { userId: number }) => {
   }, [fetchUserPosts]);
 
   return (
-    <div className={styles.postsSection}>
-      <Title3>投稿一覧</Title3>
+    <PostListContext value={{ postList: posts, setPostList: setPosts }}>
+      <div className={styles.postsSection}>
+        <Title3>投稿一覧</Title3>
 
-      <div className={styles.paginationContainer}>
-        <Button
-          appearance='secondary'
-          icon={<ChevronLeft />}
-          disabled={currentPageNumber === 1}
-          onClick={handlePreviousPage}
-        >
-          前のページ
-        </Button>
-        <div className={styles.pageInfo}>ページ{currentPageNumber}</div>
-        <Button
-          appearance='secondary'
-          icon={<ChevronRight />}
-          iconPosition='after'
-          disabled={!hasNextPage}
-          onClick={handleNextPage}
-        >
-          次のページ
-        </Button>
-      </div>
+        <div className={styles.paginationContainer}>
+          <Button
+            appearance='secondary'
+            icon={<ChevronLeft />}
+            disabled={currentPageNumber === 1}
+            onClick={handlePreviousPage}
+          >
+            前のページ
+          </Button>
+          <div className={styles.pageInfo}>ページ{currentPageNumber}</div>
+          <Button
+            appearance='secondary'
+            icon={<ChevronRight />}
+            iconPosition='after'
+            disabled={!hasNextPage}
+            onClick={handleNextPage}
+          >
+            次のページ
+          </Button>
+        </div>
 
-      <div className={styles.postList}>
-        {posts.map((post) => (
-          <Post key={post.id} post={post} />
-        ))}
-      </div>
+        <div className={styles.postList}>
+          {posts.map((post) => (
+            <Post key={post.id} post={post} />
+          ))}
+        </div>
 
-      <div className={styles.paginationContainer}>
-        <Button
-          appearance='secondary'
-          icon={<ChevronLeft />}
-          disabled={currentPageNumber === 1}
-          onClick={handlePreviousPage}
-        >
-          前のページ
-        </Button>
-        <div className={styles.pageInfo}>ページ{currentPageNumber}</div>
-        <Button
-          appearance='secondary'
-          icon={<ChevronRight />}
-          iconPosition='after'
-          disabled={!hasNextPage}
-          onClick={handleNextPage}
-        >
-          次のページ
-        </Button>
+        <div className={styles.paginationContainer}>
+          <Button
+            appearance='secondary'
+            icon={<ChevronLeft />}
+            disabled={currentPageNumber === 1}
+            onClick={handlePreviousPage}
+          >
+            前のページ
+          </Button>
+          <div className={styles.pageInfo}>ページ{currentPageNumber}</div>
+          <Button
+            appearance='secondary'
+            icon={<ChevronRight />}
+            iconPosition='after'
+            disabled={!hasNextPage}
+            onClick={handleNextPage}
+          >
+            次のページ
+          </Button>
+        </div>
       </div>
-    </div>
+    </PostListContext>
   );
 };
