@@ -91,13 +91,9 @@ export const updateUser = async (
   const API_URL = `${BASE_URL}/${userId}`;
 
   try {
-    const response = await axios.patch<UpdateUserResponse>(
-      API_URL,
-      userData,
-      {
-        headers: createAuthHeaders(token),
-      },
-    );
+    const response = await axios.patch<UpdateUserResponse>(API_URL, userData, {
+      headers: createAuthHeaders(token),
+    });
 
     return {
       success: true,
