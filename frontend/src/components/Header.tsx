@@ -1,8 +1,7 @@
 import { Button, makeStyles, Text, Title2 } from '@fluentui/react-components';
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { logout } from '../api/auth';
-import { fetchUser } from '../api/users';
 import { UserContext } from '../contexts/UserContext';
 
 const useStyles = makeStyles({
@@ -39,7 +38,6 @@ const useStyles = makeStyles({
 export const Header = () => {
   const styles = useStyles();
   const navigate = useNavigate();
-  const [username, setUsername] = useState('');
   const { userInfo, setUserInfo } = useContext(UserContext);
 
   const myLogout = () => {
@@ -50,19 +48,6 @@ export const Header = () => {
     navigate('/');
   };
 
-  useEffect(() => {
-    const myFetchUser = async () => {
-      if (!userInfo) return;
-      const apiResult = await fetchUser(userInfo.userId);
-      if (!apiResult.success || !apiResult.data) {
-        console.error(apiResult.error);
-        return;
-      }
-      setUsername(apiResult.data.username);
-    };
-    myFetchUser();
-  }, []);
-
   return (
     <div className={styles.header}>
       <span className={styles.headerLeft}>
@@ -72,7 +57,7 @@ export const Header = () => {
       </span>
 
       <span className={styles.headerRight}>
-        <Text>{username}</Text>
+        <Text>{userInfo?.username}</Text>
         <Button onClick={myLogout}>ログアウト</Button>
       </span>
     </div>

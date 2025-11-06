@@ -146,7 +146,7 @@ const UserProfile = ({
   setUser: (user: UserInfo) => void;
 }) => {
   const styles = useStyles();
-  const { userInfo } = useContext(UserContext);
+  const { userInfo, setUserInfo } = useContext(UserContext);
   const { toasterId } = useContext(ToasterContext);
   const { dispatchToast } = useToastController(toasterId);
 
@@ -200,7 +200,10 @@ const UserProfile = ({
       });
 
       if (updateData.username) {
-        userInfo.username = updateData.username;
+        setUserInfo({
+          ...userInfo,
+          username: updateData.username,
+        });
       }
 
       dispatchToast(
