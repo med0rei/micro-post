@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
@@ -67,11 +71,7 @@ export class AuthService {
       throw new UnauthorizedException('Token has expired');
     }
 
-    const user: User | null = await this.userService.findOneById(auth.userId);
-    if (!user) {
-      throw new UnauthorizedException('User not found');
-    }
-
+    const user: User = await this.userService.findOneByIdWithEmail(auth.userId);
     return { id: user.id, username: user.username };
   }
 

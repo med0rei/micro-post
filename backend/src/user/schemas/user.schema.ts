@@ -43,6 +43,7 @@ export const getUserResponseSchema = z
   .object({
     id: USER.id,
     username: USER.username,
+    email: USER.email.optional(),
     createdAt: USER.createdAt,
     updatedAt: USER.updatedAt,
   })

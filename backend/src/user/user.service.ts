@@ -42,15 +42,31 @@ export class UserService {
     });
   }
 
-  async findOneById(userId: number): Promise<User | null> {
+  async findOneByIdWithEmail(userId: number): Promise<User> {
     const user = await this.userRepository.findOne({
       where: {
         id: Equal(userId),
       },
+      select: ['id', 'username', 'email', 'createdAt', 'updatedAt'],
     });
 
     if (!user) {
       throw new NotFoundException('User not found');
+    }
+
+    return user;
+  }
+
+  async findOneById(
+    userId: number,
+    requestUserId?: number,
+  ): Promise<User | Omit<User, 'email'>> {
+    const user = await this.findOneByIdWithEmail(userId);
+
+    // 本人以外にはemailを返さない
+    if (requestUserId !== userId) {
+      const { email: _, ...userWithoutEmail } = user;
+      return userWithoutEmail;
     }
 
     return user;
