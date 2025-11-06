@@ -61,14 +61,11 @@ export const Sidebar = () => {
       limit: 10,
     });
 
-    console.log(fetchPostsResult);
     if (!fetchPostsResult.success) {
-      console.error('Failed to fetch posts:', fetchPostsResult.error);
       return;
     }
 
     if (!fetchPostsResult.data) {
-      console.error('data is falsy');
       return;
     }
 
@@ -90,7 +87,6 @@ export const Sidebar = () => {
 
   const onSendClick = async () => {
     if (!userInfo) {
-      console.error('User not signed in');
       return;
     }
 

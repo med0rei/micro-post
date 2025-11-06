@@ -357,12 +357,10 @@ const UserPosts = ({ userId }: { userId: number }) => {
       });
 
       if (!fetchPostsResult.success) {
-        console.error('Failed to fetch posts:', fetchPostsResult.error);
         return;
       }
 
       if (!fetchPostsResult.data) {
-        console.error('data is falsy');
         return;
       }
 

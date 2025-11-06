@@ -44,10 +44,8 @@ export const SignInForm = () => {
   const navigate = useNavigate();
 
   const onSignInClick = async () => {
-    console.log('onSignInClick');
     const result = await signIn(credentials.userId, credentials.password);
     if (result.success && result.data) {
-      console.log('Sign-in successful:', result.data);
       userContext.setUserInfo({
         userId: result.data.userId,
         username: await fetchUser(result.data.userId).then((res) => {
@@ -60,8 +58,6 @@ export const SignInForm = () => {
         token: result.data.token,
       });
       navigate('/main');
-    } else {
-      console.error('Sign-in failed:', result.error);
     }
   };
 

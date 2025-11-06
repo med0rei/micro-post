@@ -47,14 +47,11 @@ export const SignUpForm = () => {
 
   const onSignUpClick = async () => {
     setError(null);
-    console.log('onSignUpClick');
 
     const result = await createUser(credentials);
     if (result.success && result.data) {
-      console.log('Sign-up successful:', result.data);
       navigate('/');
     } else {
-      console.error('Sign-up failed:', result.error);
       setError(result.error?.message || 'ユーザー登録に失敗しました');
     }
   };
