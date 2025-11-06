@@ -18,7 +18,6 @@ import { Post } from './Post';
 
 const useStyles = makeStyles({
   container: {
-    display: 'flex',
     flexDirection: 'column',
     gap: '20px',
     margin: '0 auto',
@@ -30,6 +29,7 @@ const useStyles = makeStyles({
     display: 'flex',
     flexDirection: 'column',
     gap: '12px',
+    marginBottom: '30px',
     padding: '24px',
   },
   displayName: {
@@ -188,7 +188,7 @@ const UserPosts = ({ userId }: { userId: number }) => {
 
       <div className={styles.paginationContainer}>
         <Button
-          appearance="secondary"
+          appearance='secondary'
           icon={<ChevronLeft />}
           disabled={currentPageNumber === 1}
           onClick={handlePreviousPage}
@@ -197,9 +197,9 @@ const UserPosts = ({ userId }: { userId: number }) => {
         </Button>
         <div className={styles.pageInfo}>ページ{currentPageNumber}</div>
         <Button
-          appearance="secondary"
+          appearance='secondary'
           icon={<ChevronRight />}
-          iconPosition="after"
+          iconPosition='after'
           disabled={!hasNextPage}
           onClick={handleNextPage}
         >
@@ -215,7 +215,7 @@ const UserPosts = ({ userId }: { userId: number }) => {
 
       <div className={styles.paginationContainer}>
         <Button
-          appearance="secondary"
+          appearance='secondary'
           icon={<ChevronLeft />}
           disabled={currentPageNumber === 1}
           onClick={handlePreviousPage}
@@ -224,9 +224,9 @@ const UserPosts = ({ userId }: { userId: number }) => {
         </Button>
         <div className={styles.pageInfo}>ページ{currentPageNumber}</div>
         <Button
-          appearance="secondary"
+          appearance='secondary'
           icon={<ChevronRight />}
-          iconPosition="after"
+          iconPosition='after'
           disabled={!hasNextPage}
           onClick={handleNextPage}
         >
